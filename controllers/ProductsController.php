@@ -180,4 +180,28 @@ class ProductsController extends Controller
             ]);
 
     }
+
+    public function deleteAction($params)
+    {
+        $id = intval($params[0]);
+        $yes = boolval($params[1] == 'yes');
+        if (!User::isAdmin() || $id <= 0)
+            return $this->error(403);
+
+        $product = Products::getProductById($id);
+        if ($yes) {
+            $filePath = 'files/categories/' . $product['Image'];
+            if (is_file($filePath))
+                unlink($filePath);
+
+            Products::deleteProduct($id);
+
+            $this->redirect("/categories/view/{$product['CategoriesId']}");
+        }
+
+        return $this->render(null,
+            [
+                'product' => $product,
+            ]);
+    }
 }
