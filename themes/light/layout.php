@@ -29,22 +29,23 @@ else
 </head>
 <body>
 <?php include('svg.html') ?>
-<header class="px-3 py-2 text-bg-dark border-bottom">
+<header class="px-3 py-1 text-bg-dark border-bottom sticky-top">
     <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between">
 
             <div class="col-md-3 mb-2 mb-md-0">
-                <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
-                    <svg class="bi" width="75" height="75" role="img">
+                <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none align-items-center gap-3">
+                    <svg class="bi" width="65" height="65" role="img">
                         <use xlink:href="#logo"></use>
                     </svg>
+                    <span class="fs-3 text-white text-uppercase font-weight-bold text-nowrap">Whiskey World</span>
                 </a>
             </div>
 
             <ul class="nav col-12 col-lg-auto my-2 justify-content-center align-items-center my-md-0 text-small">
                 <li>
                     <a href="/" class="nav-link text-white">
-                        <svg class="bi d-block mx-auto mb-1" width="24" height="24">
+                        <svg class="bi d-block mx-auto mb-1" width="20" height="20">
                             <use xlink:href="#home"></use>
                         </svg>
                         Головна
@@ -52,7 +53,7 @@ else
                 </li>
                 <li>
                     <a href="/categories" class="nav-link text-white">
-                        <svg class="bi d-block mx-auto mb-1" width="24" height="24">
+                        <svg class="bi d-block mx-auto mb-1" width="20" height="20">
                             <use xlink:href="#grid"></use>
                         </svg>
                         Категорії
@@ -60,7 +61,7 @@ else
                 </li>
                 <li>
                     <a href="/cart" class="nav-link text-white">
-                        <svg class="bi d-block mx-auto mb-1" width="24" height="24">
+                        <svg class="bi d-block mx-auto mb-1" width="20" height="20">
                             <use xlink:href="#cart"></use>
                         </svg>
                         Кошик

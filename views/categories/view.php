@@ -5,7 +5,7 @@
 use models\User;
 ?>
 
-<h1><?= $category['Name'] ?></h1>
+<h1 class="my-4"><?= $category['Name'] ?></h1>
 <?php if (User::isAdmin()): ?>
     <a href="/products/add/<?= $category['CategoryId'] ?>" class="btn btn-success mt-3 mb-4">Додати товар</a>
 <?php endif; ?>

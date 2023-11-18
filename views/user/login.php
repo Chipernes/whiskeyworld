@@ -4,7 +4,7 @@
 \core\Core::getInstance()->pageParams['title'] = 'Вхід на сайт';
 ?>
 
-<h1 class="h3 mb-3 fw-normal text-center">Вхід на сайт</h1>
+<h1 class="fs-2 mt-3 mb-4 text-center">Вхід на сайт</h1>
 <main class="form-signin w-100 m-auto">
     <form action="" method="post">
         <div class="form-floating mb-3">

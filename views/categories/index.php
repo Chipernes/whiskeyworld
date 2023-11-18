@@ -6,7 +6,7 @@ use models\User;
 
 ?>
 
-<h2 class="mt-4 mb-4 fs-1">Список категорій</h2>
+<h1 class="mt-4 mb-5">Список категорій</h1>
 <?php if (User::isAdmin()) : ?>
     <a href="/categories/add" class="btn btn-success mt-3 mb-4">Додати категорію</a>
 <?php endif; ?>
