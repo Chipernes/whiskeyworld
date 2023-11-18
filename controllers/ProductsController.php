@@ -95,10 +95,16 @@ class ProductsController extends Controller
     {
         $id = intval($params[0]);
         $product = Products::getProductById($id);
+        $category = Categories::getCategoryById($product['CategoryId']);
+        $brand = Brands::getBrandById($product['BrandId']);
+        $grapeVariety = GrapeVarieties::getGrapeVarietyById($product['GrapeVarietyId']);
 
         return $this->render(null,
             [
-                'product' => $product
+                'product' => $product,
+                'category' => $category,
+                'brand' => $brand,
+                'grapeVariety' => $grapeVariety
             ]);
     }
 
@@ -189,6 +195,7 @@ class ProductsController extends Controller
             return $this->error(403);
 
         $product = Products::getProductById($id);
+
         if ($yes) {
             $filePath = 'files/categories/' . $product['Image'];
             if (is_file($filePath))
@@ -201,7 +208,7 @@ class ProductsController extends Controller
 
         return $this->render(null,
             [
-                'product' => $product,
+                'product' => $product
             ]);
     }
 }

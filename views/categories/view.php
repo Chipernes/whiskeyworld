@@ -18,18 +18,16 @@ use models\User;
                 <a href="/products/view/<?= $product['ProductId'] ?>" style="text-decoration: none; color: black">
                     <?php $filePath = 'files/products/' . $product['Image']; ?>
                     <?php if (is_file($filePath)): ?>
-                        <img style="object-fit: contain; width: width: 200px; height: 300px" src="/<?= $filePath ?>"
-                             class="card-img-top" alt="">
+                        <img style="object-fit: contain; height: 300px" src="/<?= $filePath ?>" class="card-img-top" alt="">
                     <?php else: ?>
-                        <img style="object-fit: contain; width: width: 200px; height: 300px"
-                             src="/static/images/no-image.jpg" class="card-img-top" alt="">
+                        <img style="object-fit: contain; height: 300px" src="/static/images/no-image.jpg" class="card-img-top" alt="">
                     <?php endif; ?>
 
                     <div class="card-body">
                         <h5 class="card-title">
                             <?= $category['Name'] ?>
                             <?= $product['Name'] ?>
-                            <?= $product['Volume'] . 'л' ?>
+                            <?= $product['Volume'] . ' л' ?>
                             <?= $product['Strength'] . '%' ?>
                         </h5>
                     </div>
