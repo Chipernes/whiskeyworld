@@ -4,6 +4,7 @@ namespace controllers;
 
 use core\Controller;
 use core\Core;
+use models\Brands;
 use models\Categories;
 use models\GrapeVarieties;
 use models\Products;
@@ -24,6 +25,7 @@ class ProductsController extends Controller
 
         $categories = Categories::getCategories();
         $grapeVarieties = GrapeVarieties::getGrapeVarieties();
+        $brands = Brands::getBrands();
 
         if (Core::getInstance()->requestMethod == 'POST') {
             $errors = [];
@@ -69,7 +71,7 @@ class ProductsController extends Controller
 
                 Products::addProduct($valuesArray, $_FILES['file']['tmp_name']);
 
-                $this->redirect('/products');
+                $this->redirect("/categories/view/$categoryId");
             } else {
                 return $this->render(null,
                     [
@@ -85,7 +87,8 @@ class ProductsController extends Controller
                 'categories' => $categories,
                 '$categoryId' => $categoryId,
                 'categoryId' => $categoryId,
-                'grapeVarieties' => $grapeVarieties
+                'grapeVarieties' => $grapeVarieties,
+                'brands' => $brands
             ]);
     }
 

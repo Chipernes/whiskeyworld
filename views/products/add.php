@@ -4,9 +4,10 @@
 /** @var array $categories */
 /** @var array|null $categoryId */
 /** @var array|null $grapeVarieties */
+/** @var array|null $brands */
 ?>
 
-<h2>Додавання товару</h2>
+<h2 class="mt-3 mb-4 fs-1">Додавання товару</h2>
 <form action="" method="post" enctype="multipart/form-data">
     <div class="mb-3">
         <label for="category" class="form-label">Виберіть категорію алкоголю <span class="text-danger">*</span></label>
@@ -54,12 +55,12 @@
     </div>
     <div class="mb-3">
         <label for="brand" class="form-label">Бренд алкоголю (опціонально)</label>
-        <input type="text" class="form-control" id="brand" name="BrandId">
-        <!--<select class="form-control" id="CountryId" name="CountryId">
-            <?php /*foreach ($categories as $categories): */?>
-                <option value="<?php /*= $categories['AlcoholId'] */?>"><?php /*= $categories['Name'] */?></option>
-            <?php /*endforeach; */?>
-        </select>-->
+        <select class="form-control" id="brand" name="BrandId">
+            <option value="" disabled selected hidden>Виберіть бренд</option>
+            <?php foreach ($brands as $brand): ?>
+                <option value="<?= $brand['BrandId'] ?>"><?= $brand['Name'] ?></option>
+            <?php endforeach; ?>
+        </select>
     </div>
     <div class="mb-3">
         <label for="taste" class="form-label">Смак алкоголю <span class="text-danger">*</span></label>
