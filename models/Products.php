@@ -34,10 +34,10 @@ class Products
 
     public static function updateProduct($id, $newRow)
     {
-        $fieldsList = ['Name', 'Type', 'Color', 'Volume', 'Strength',
-            'Country', 'Taste', 'Aging', 'GrapeVariety', 'Image', 'Visible'];
+        $fieldsList = ['CategoryId', 'Name', 'Type', 'Color', 'BrandId', 'Volume', 'Strength',
+            'Taste', 'GrapeVarietyId', 'Aging', 'Description', 'Count', 'Price', 'Visibility'];
 
-        $row = Utils::filterArray($newRow, $fieldsList);
+        $newRow = Utils::filterArray($newRow, $fieldsList);
 
         Core::getInstance()->db->update(self::$tableName, $newRow, ['ProductId' => $id]);
     }
@@ -55,5 +55,31 @@ class Products
     public static function getProductsInCategory($categoryId)
     {
         return Core::getInstance()->db->select(self::$tableName, '*', ['CategoryId' => $categoryId]);
+    }
+
+    public static function deleteImageFile($id)
+    {
+        $row = self::getProductById($id);
+        $imagePath = 'files/products/' . $row['Image'];
+
+        if (is_file($imagePath))
+            unlink($imagePath);
+    }
+
+    public static function changeImage($id, $newImagePath)
+    {
+        self::deleteImageFile($id);
+
+        do {
+            $fileName = uniqid() . '.jpg';
+            $newPath = "files/products/{$fileName}";
+        } while (file_exists($newPath));
+
+        move_uploaded_file($newImagePath, $newPath);
+
+        Core::getInstance()->db->update(self::$tableName,
+            ['Image' => $fileName],
+            ['ProductId' => $id]
+        );
     }
 }

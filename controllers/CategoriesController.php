@@ -17,8 +17,11 @@ class CategoriesController extends Controller
 
     public function indexAction()
     {
-        $rows = Categories::getCategories();
-        return $this->render(null, ['rows' => $rows]);
+        $categories = Categories::getCategories();
+        return $this->render(null,
+            [
+                'categories' => $categories
+            ]);
     }
 
     public function addAction()

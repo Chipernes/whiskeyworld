@@ -1,10 +1,8 @@
 <?php
 /** @var array $category */
-
 /** @var array $products */
 
 use models\User;
-
 ?>
 
 <h1><?= $category['Name'] ?></h1>
@@ -37,9 +35,9 @@ use models\User;
                     </div>
                     <?php if (User::isAdmin()) : ?>
                         <div class="text-center">
-                            <a href="/products/edit/<?= $category['CategoryId'] ?>"
+                            <a href="/products/edit/<?= $product['ProductId'] ?>"
                                class="btn btn-primary">Редагувати</a>
-                            <a href="/products/delete/<?= $category['CategoryId'] ?>"
+                            <a href="/products/delete/<?= $product['ProductId'] ?>"
                                class="btn btn-danger">Видалити</a>
                         </div>
                     <?php endif; ?>

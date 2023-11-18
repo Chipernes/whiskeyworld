@@ -85,7 +85,6 @@ class ProductsController extends Controller
         return $this->render(null,
             [
                 'categories' => $categories,
-                '$categoryId' => $categoryId,
                 'categoryId' => $categoryId,
                 'grapeVarieties' => $grapeVarieties,
                 'brands' => $brands
@@ -109,26 +108,64 @@ class ProductsController extends Controller
         if (!User::isAdmin() || $id <= 0)
             return $this->error(403);
 
-        $categories = Categories::getCategoryById($id);
+        $categories = Categories::getCategories();
+        $grapeVarieties = GrapeVarieties::getGrapeVarieties();
+        $brands = Brands::getBrands();
+        $product = Products::getProductById($id);
 
         if (Core::getInstance()->requestMethod == 'POST') {
             $errors = [];
-            if (empty($_POST['name']))
-                $errors['name'] = 'Назва категорії не вказана';
+            if (empty($_POST['CategoryId']))
+                $errors['CategoryId'] = 'Категорія не вибрана';
+            if (empty($_POST['Name']))
+                $errors['Name'] = 'Назва алкоголю не вказана';
+            if (empty($_POST['Color']))
+                $errors['Color'] = 'Колір алкоголю не вказаний';
+            if ($_POST['Volume'] <= 0)
+                $errors['Volume'] = 'Об\'єм алкоголю не вказаний коректно';
+            if ($_POST['Strength'] <= 0)
+                $errors['Strength'] = 'Міцність алкоголю не вказана коректно';
+            if (empty($_POST['Taste']))
+                $errors['Taste'] = 'Смак алкоголю не вказаний';
+            if ($_POST['Price'] <= 0)
+                $errors['Price'] = 'Ціна алкоголю не вказана коректно';
+            if ($_POST['Count'] <= 0)
+                $errors['Count'] = 'Кількість алкоголю не вказаний коректно';
 
             if (empty($errors)) {
-                Categories::updateCategory($id, $_POST['name']);
-                if (!empty($_FILES['file']['tmp_name']))
-                    Categories::changeImage($id, $_FILES['file']['tmp_name']);
+                $valuesArray = [
+                    'CategoryId' => $_POST['CategoryId'],
+                    'Name' => $_POST['Name'],
+                    'Type' => $_POST['Type'],
+                    'Color' => $_POST['Color'],
+                    'BrandId' => $_POST['BrandId'],
+                    'Volume' => $_POST['Volume'],
+                    'Strength' => $_POST['Strength'],
+                    'Taste' => $_POST['Taste'],
+                    'GrapeVarietyId' => $_POST['GrapeVarietyId'],
+                    'Aging' => $_POST['Aging'],
+                    'Description' => $_POST['Description'],
+                    'Count' => $_POST['Count'],
+                    'Price' => $_POST['Price'],
+                    'Visibility' => $_POST['Visibility']
+                ];
 
-                $this->redirect('/categories/index');
+                foreach ($valuesArray as $item => $value) {
+                    if ($value == '')
+                        $valuesArray[$item] = null;
+                }
+
+                Products::updateProduct($id, $valuesArray);
+                if (!empty($_FILES['file']['tmp_name']))
+                    Products::changeImage($id, $_FILES['file']['tmp_name']);
+
+                $this->redirect("/categories/view/$id");
             } else {
-                $model = $_POST;
                 return $this->render(null,
                     [
                         'errors' => $errors,
-                        'model' => $model,
-                        'categories' => $categories,
+                        'model' => $_POST,
+                        'categories' => $categories
                     ]);
             }
         }
@@ -136,6 +173,11 @@ class ProductsController extends Controller
         return $this->render(null,
             [
                 'categories' => $categories,
+                'categoryId' => $id,
+                'grapeVarieties' => $grapeVarieties,
+                'brands' => $brands,
+                'product' => $product
             ]);
+
     }
 }
