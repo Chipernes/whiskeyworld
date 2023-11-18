@@ -5,6 +5,7 @@ namespace controllers;
 use core\Controller;
 use core\Core;
 use models\Categories;
+use models\GrapeVarieties;
 use models\Products;
 use models\User;
 
@@ -22,6 +23,7 @@ class ProductsController extends Controller
             $categoryId = null;
 
         $categories = Categories::getCategories();
+        $grapeVarieties = GrapeVarieties::getGrapeVarieties();
 
         if (Core::getInstance()->requestMethod == 'POST') {
             $errors = [];
@@ -73,8 +75,7 @@ class ProductsController extends Controller
                     [
                         'errors' => $errors,
                         'model' => $_POST,
-                        'categories' => $categories,
-                        'categoryId' => $categoryId
+                        'categories' => $categories
                     ]);
             }
         }
@@ -82,7 +83,9 @@ class ProductsController extends Controller
         return $this->render(null,
             [
                 'categories' => $categories,
-                '$categoryId' => $categoryId
+                '$categoryId' => $categoryId,
+                'categoryId' => $categoryId,
+                'grapeVarieties' => $grapeVarieties
             ]);
     }
 
