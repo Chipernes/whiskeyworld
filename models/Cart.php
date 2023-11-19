@@ -12,6 +12,11 @@ class Cart
         $_SESSION['cart'][$productId] += $count;
     }
 
+    public static function resetCart()
+    {
+        $_SESSION['cart'] = null;
+    }
+
     public static function getProductsInCart(): ?array
     {
         if (is_array($_SESSION['cart'])) {

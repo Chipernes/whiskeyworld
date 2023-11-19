@@ -3,6 +3,7 @@
 namespace controllers;
 
 use core\Controller;
+use models\Categories;
 
 class MainController extends Controller
 {
@@ -12,7 +13,11 @@ class MainController extends Controller
     }
 
     public function indexAction() {
-        return $this->render();
+        $categories = Categories::getCategories();
+        return $this->render(null,
+            [
+                'categories' => $categories
+            ]);
     }
 
     public function errorAction($code) {
