@@ -5,6 +5,7 @@ namespace controllers;
 use core\Controller;
 use core\Core;
 use models\Brands;
+use models\Cart;
 use models\Categories;
 use models\GrapeVarieties;
 use models\Products;

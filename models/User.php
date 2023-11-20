@@ -98,6 +98,7 @@ class User
     public static function logoutUser()
     {
         unset($_SESSION['user']);
+        Cart::resetCart();
     }
 
     public static function isUserAuthenticated(): bool

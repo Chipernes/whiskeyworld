@@ -3,6 +3,7 @@
 namespace controllers;
 
 use core\Controller;
+use core\Core;
 use models\Cart;
 
 class CartController extends Controller
@@ -14,5 +15,19 @@ class CartController extends Controller
             [
                 'cart' => $cart
             ]);
+    }
+
+    public function addAction($params)
+    {
+        $id = intval($params[0]);
+        Cart::addProduct($id);
+        $this->redirect('/cart');
+    }
+
+    public function deleteAction($params)
+    {
+        $id = intval($params[0]);
+        Cart::deleteProduct($id);
+        $this->redirect('/cart');
     }
 }

@@ -29,17 +29,8 @@
                     Ціна: <strong class="text-danger"><?= $product['Price'] ?> грн</strong>
                 </p>
             </div>
-            <!--<div class="mb-3">
-                Доступна кількість: <strong><?php /*= $product['Count'] */ ?></strong>
-            </div>-->
             <div class="mb-3">
-                <label class="form-label" for="count">Кількість:</label>
-                <div class="d-flex gap-4">
-                    <input style="width: 100px" min="1" max="<?= $product['Count'] ?>" value="1" class="form-control"
-                           type="number" name="count"
-                           id="count">
-                    <button class="btn btn-success">Придбати</button>
-                </div>
+                <a href="/cart/add/<?= $product['ProductId'] ?>" class="btn btn-success">Придбати</a>
             </div>
             <div>
                 <h2 class="mt-4">Характеристики</h2>
@@ -95,3 +86,25 @@
     </div>
 </div>
 
+<script defer>
+    const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+    const appendAlert = (message, type) => {
+        const wrapper = document.createElement('div')
+        wrapper.innerHTML = [
+            `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+            `   <div>${message}</div>`,
+            '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+            '</div>'
+        ].join('')
+
+        alertPlaceholder.append(wrapper)
+    }
+
+    const alertTrigger = document.getElementById('liveAlertBtn')
+    if (alertTrigger) {
+        const inputCount = document.querySelector('input');
+        alertTrigger.addEventListener('click', () => {
+            appendAlert(`Супер! Товар був доданий у кошик!`, 'success')
+        })
+    }
+</script>

@@ -12,6 +12,14 @@ class Cart
         $_SESSION['cart'][$productId] += $count;
     }
 
+    public static function deleteProduct($productId)
+    {
+        unset($_SESSION['cart'][$productId]);
+
+        if (empty($_SESSION['cart']))
+            self::resetCart();
+    }
+
     public static function resetCart()
     {
         $_SESSION['cart'] = null;
