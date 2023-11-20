@@ -24,19 +24,20 @@ class Brands
         return Core::getInstance()->db->select(self::$tableName);
     }
 
-    public static function addBrand($name)
+    public static function addBrand($name, $country)
     {
         Core::getInstance()->db->insert(
             self::$tableName,
             [
-                'Name' => $name
+                'Name' => $name,
+                'Country' => $country
             ]
         );
     }
 
     public static function updateBrand($id, $updatesArray)
     {
-        $updatesArray = Utils::filterArray($updatesArray, ['Name']);
+        $updatesArray = Utils::filterArray($updatesArray, ['Name', 'Country']);
         Core::getInstance()->db->update(
             self::$tableName,
             $updatesArray,
@@ -44,11 +45,8 @@ class Brands
         );
     }
 
-    public static function deleteBrand($conditionArray)
+    public static function deleteBrand($id)
     {
-        Core::getInstance()->db->delete(
-            self::$tableName,
-            $conditionArray
-        );
+            Core::getInstance()->db->delete(self::$tableName, ['BrandId' => $id]);
     }
 }

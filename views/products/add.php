@@ -7,7 +7,13 @@
 /** @var array|null $brands */
 ?>
 
-<h2 class="mt-3 mb-4 fs-1">Додавання товару</h2>
+<div class="d-flex align-items-center gap-5">
+    <h2 class="mt-3 mb-4 fs-1">Додавання товару</h2>
+    <div class="d-flex gap-3">
+        <a href="/brands" class="btn btn-success">Модифікувати бренд</a>
+        <a href="/grapeVarieties" class="btn btn-success">Модифікувати сорт винограду</a>
+    </div>
+</div>
 <form action="" method="post" enctype="multipart/form-data">
     <div class="mb-3">
         <label for="category" class="form-label">Виберіть категорію алкоголю <span class="text-danger">*</span></label>
@@ -105,7 +111,7 @@
     </div>
     <div class="mb-3">
         <label for="file" class="form-label">Файл з фотографією для товару</label>
-        <input multiple class="form-control" type="file" id="file" name="file" accept="image/jpeg">
+        <input multiple class="form-control" type="file" id="file" name="file" accept="image/jpeg, image/webp, image/png">
     </div>
     <div class="mb-3">
         <label for="visibility" class="form-label">Видимість для клієнтів <span class="text-danger">*</span></label>
