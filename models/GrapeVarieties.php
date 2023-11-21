@@ -19,6 +19,16 @@ class GrapeVarieties
             return null;
     }
 
+    public static function getGrapeVarietyByName($name)
+    {
+        $rows = Core::getInstance()->db->select(self::$tableName, '*', ['Name' => $name]);
+
+        if (!empty($rows))
+            return $rows[0];
+        else
+            return null;
+    }
+
     public static function getGrapeVarieties()
     {
         return Core::getInstance()->db->select(self::$tableName);
@@ -44,11 +54,8 @@ class GrapeVarieties
         );
     }
 
-    public static function deleteGrapeVariety($conditionArray)
+    public static function deleteGrapeVariety($id)
     {
-        Core::getInstance()->db->delete(
-            self::$tableName,
-            $conditionArray
-        );
+        Core::getInstance()->db->delete(self::$tableName, ['GrapeVarietyId' => $id]);
     }
 }

@@ -5,22 +5,21 @@ namespace controllers;
 use core\Controller;
 use core\Core;
 use models\Brands;
-use models\Cart;
-use models\Categories;
+use models\GrapeVarieties;
 use models\User;
 
-class BrandsController extends Controller
+class GrapeVarietiesController extends Controller
 {
     public function indexAction()
     {
         if (!User::isAdmin())
             return $this->error(403);
 
-        $brands = Brands::getBrands();
+        $grapeVarieties = GrapeVarieties::getGrapeVarieties();
 
         return $this->render(null,
             [
-                'brands' => $brands
+                'grapeVarieties' => $grapeVarieties
             ]);
     }
 
@@ -31,19 +30,16 @@ class BrandsController extends Controller
 
         if (Core::getInstance()->requestMethod == 'POST') {
             $_POST['name'] = trim($_POST['name']);
-            $_POST['country'] = trim($_POST['country']);
 
             $errors = [];
             if (empty($_POST['name']))
-                $errors['name'] = 'Назва бренда не вказана';
-            if (empty($_POST['country']))
-                $errors['country'] = 'Країна реїстрації бренда не вказана';
-            if (!empty(Brands::getBrandByName($_POST['name'])))
-                $errors['name'] = 'Такий бренд вже існує';
+                $errors['name'] = 'Назва сорту не вказана';
+            if (!empty(GrapeVarieties::getGrapeVarietyByName($_POST['name'])))
+                $errors['name'] = 'Такий сорт вже існує';
 
             if (empty($errors)) {
-                Brands::addBrand($_POST['name'], $_POST['country']);
-                $this->redirect('/brands');
+                GrapeVarieties::addGrapeVariety($_POST['name']);
+                $this->redirect('/grapeVarieties');
             } else {
                 return $this->render(null,
                     [
@@ -61,41 +57,39 @@ class BrandsController extends Controller
         if (!User::isAdmin())
             return $this->error(403);
 
-        $brands = Brands::getBrands();
+        $grapeVarieties = GrapeVarieties::getGrapeVarieties();
 
         $errors = [];
         if (empty($_GET['name']))
             $errors['name'] = 'Назва бренда не вказана';
-        if (empty($_GET['country']))
-            $errors['country'] = 'Країна реїстрації бренда не вказана';
 
         if ($_GET['check'] == 'false') {
             $errors = 1;
         }
 
         if (empty($errors)) {
-            Brands::updateBrand(
-                $_GET['brandId'],
+            GrapeVarieties::updateGrapeVariety(
+                $_GET['grapeVarietyId'],
                 [
                     'Name' => $_GET['name'],
-                    'Country' => $_GET['country']
-                ]);
+                ]
+            );
 
-            $this->redirect('/brands');
+            $this->redirect('/grapeVarieties');
         } else {
             $model = $_GET;
             return $this->render(null,
                 [
                     'model' => $model,
                     'errors' => $errors,
-                    'brands' => $brands,
+                    'grapeVarieties' => $grapeVarieties,
                 ]);
         }
 
 
         return $this->render(null,
             [
-                'brands' => $brands,
+                'grapeVarieties' => $grapeVarieties,
             ]);
     }
 
@@ -106,15 +100,15 @@ class BrandsController extends Controller
         if (!User::isAdmin())
             return $this->error(403);
 
-        $brands = Brands::getBrands();
+        $grapeVarieties = GrapeVarieties::getGrapeVarieties();
         if ($yes) {
-            Brands::deleteBrand($id);
-            $this->redirect('/brands');
+            GrapeVarieties::deleteGrapeVariety($id);
+            $this->redirect('/grapeVarieties');
         }
 
         return $this->render(null,
             [
-                'brands' => $brands,
+                'grapeVarieties' => $grapeVarieties,
             ]);
     }
 }

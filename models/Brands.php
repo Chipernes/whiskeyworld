@@ -35,6 +35,16 @@ class Brands
         );
     }
 
+    public static function getBrandByName($name)
+    {
+        $rows = Core::getInstance()->db->select(self::$tableName, '*', ['Name' => $name]);
+
+        if (!empty($rows))
+            return $rows[0];
+        else
+            return null;
+    }
+
     public static function updateBrand($id, $updatesArray)
     {
         $updatesArray = Utils::filterArray($updatesArray, ['Name', 'Country']);
