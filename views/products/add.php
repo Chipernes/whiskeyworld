@@ -12,6 +12,7 @@
     <div class="d-flex gap-3">
         <a href="/brands" class="btn btn-success">Модифікувати бренд</a>
         <a href="/grapeVarieties" class="btn btn-success">Модифікувати сорт винограду</a>
+        <a href="/sugarContents" class="btn btn-success">Модифікувати класифікацію за вмістом цукру</a>
     </div>
 </div>
 <form action="" method="post" enctype="multipart/form-data">
@@ -47,14 +48,14 @@
     </div>
     <div class="mb-3">
         <label for="volume" class="form-label">Об'єм алкоголю <span class="text-danger">*</span></label>
-        <input type="number" class="form-control" id="volume" name="Volume" aria-describedby="volumeHelp">
+        <input type="text" class="form-control" id="volume" name="Volume" aria-describedby="volumeHelp">
         <?php if (!empty($errors['Volume'])): ?>
             <div id="volumeHelp" class="form-text text-danger"><?php echo $errors['Volume'] ?></div>
         <?php endif; ?>
     </div>
     <div class="mb-3">
         <label for="strength" class="form-label">Міцність алкоголю <span class="text-danger">*</span></label>
-        <input type="number" class="form-control" id="strength" name="Strength" aria-describedby="strengthHelp">
+        <input type="text" class="form-control" id="strength" name="Strength" aria-describedby="strengthHelp">
         <?php if (!empty($errors['Strength'])): ?>
             <div id="strengthHelp" class="form-text text-danger"><?php echo $errors['Strength'] ?></div>
         <?php endif; ?>

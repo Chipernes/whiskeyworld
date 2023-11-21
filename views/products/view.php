@@ -45,10 +45,12 @@
                         <td>Об'єм</td>
                         <td><?= $product['Volume'] ?></td>
                     </tr>
-                    <tr>
-                        <td>Витримка</td>
-                        <td><?= $product['Aging'] ?></td>
-                    </tr>
+                    <?php if (!empty($product['Aging'])): ?>
+                        <tr>
+                            <td>Витримка</td>
+                            <td><?= $product['Aging'] ?></td>
+                        </tr>
+                    <?php endif; ?>
                     <tr>
                         <td>Міцність</td>
                         <td><?= $product['Strength'] ?></td>

@@ -119,6 +119,7 @@ class ProductsController extends Controller
         $grapeVarieties = GrapeVarieties::getGrapeVarieties();
         $brands = Brands::getBrands();
         $product = Products::getProductById($id);
+        $categoryId = $product['CategoryId'];
 
         if (Core::getInstance()->requestMethod == 'POST') {
             $errors = [];
@@ -166,7 +167,7 @@ class ProductsController extends Controller
                 if (!empty($_FILES['file']['tmp_name']))
                     Products::changeImage($id, $_FILES['file']['tmp_name']);
 
-                $this->redirect("/categories/view/$id");
+                $this->redirect("/categories/view/$categoryId");
             } else {
                 return $this->render(null,
                     [
@@ -180,7 +181,7 @@ class ProductsController extends Controller
         return $this->render(null,
             [
                 'categories' => $categories,
-                'categoryId' => $id,
+                'categoryId' => $categoryId,
                 'grapeVarieties' => $grapeVarieties,
                 'brands' => $brands,
                 'product' => $product
