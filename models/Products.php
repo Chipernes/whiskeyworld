@@ -18,7 +18,7 @@ class Products
 
         move_uploaded_file($imagePath, $newPath);
 
-        $fieldsList = ['CategoryId', 'Name', 'Type', 'Color', 'BrandId', 'Volume', 'Strength',
+        $fieldsList = ['CategoryId', 'Name', 'Type', 'Color', 'SugarContentId', 'BrandId', 'Volume', 'Strength',
             'Taste', 'GrapeVarietyId', 'Aging', 'Description', 'Count', 'Price', 'Visibility', 'Image'];
 
         $row += ['Image' => $fileName];
@@ -34,7 +34,7 @@ class Products
 
     public static function updateProduct($id, $newRow)
     {
-        $fieldsList = ['CategoryId', 'Name', 'Type', 'Color', 'BrandId', 'Volume', 'Strength',
+        $fieldsList = ['CategoryId', 'Name', 'Type', 'Color', 'SugarContentId', 'BrandId', 'Volume', 'Strength',
             'Taste', 'GrapeVarietyId', 'Aging', 'Description', 'Count', 'Price', 'Visibility'];
 
         $newRow = Utils::filterArray($newRow, $fieldsList);

@@ -5,6 +5,7 @@
 /** @var array|null $categoryId */
 /** @var array|null $grapeVarieties */
 /** @var array|null $brands */
+/** @var array|null $sugarContents */
 ?>
 
 <div class="d-flex align-items-center gap-5">
@@ -45,6 +46,15 @@
         <?php if (!empty($errors['Color'])): ?>
             <div id="colorHelp" class="form-text text-danger"><?php echo $errors['Color'] ?></div>
         <?php endif; ?>
+    </div>
+    <div class="mb-3">
+        <label for="sugarContent" class="form-label">Виберіть класифікація за вмістом цукру</label>
+        <select class="form-control" id="category" name="SugarContentId" aria-describedby="sugarContentHelp">
+            <option value="" disabled selected hidden>Виберіть класифікацію за вмістом цукру</option>
+            <?php foreach ($sugarContents as $sugarContent): ?>
+                <option value="<?= $sugarContent['SugarContentId'] ?>"><?= $sugarContent['Name'] ?></option>
+            <?php endforeach; ?>
+        </select>
     </div>
     <div class="mb-3">
         <label for="volume" class="form-label">Об'єм алкоголю <span class="text-danger">*</span></label>
@@ -116,7 +126,7 @@
     </div>
     <div class="mb-3">
         <label for="visibility" class="form-label">Видимість для клієнтів <span class="text-danger">*</span></label>
-        <select class="form-control" id="vsibility" name="Visibility">
+        <select class="form-control" id="visibility" name="Visibility">
                 <option value="1">Так</option>
                 <option value="0">Ні</option>
         </select>

@@ -9,6 +9,7 @@ use models\Cart;
 use models\Categories;
 use models\GrapeVarieties;
 use models\Products;
+use models\SugarContents;
 use models\User;
 
 class ProductsController extends Controller
@@ -53,6 +54,7 @@ class ProductsController extends Controller
                     'Name' => $_POST['Name'],
                     'Type' => $_POST['Type'],
                     'Color' => $_POST['Color'],
+                    'SugarContentId' => $_POST['SugarContentId'],
                     'BrandId' => $_POST['BrandId'],
                     'Volume' => $_POST['Volume'],
                     'Strength' => $_POST['Strength'],
@@ -99,13 +101,15 @@ class ProductsController extends Controller
         $category = Categories::getCategoryById($product['CategoryId']);
         $brand = Brands::getBrandById($product['BrandId']);
         $grapeVariety = GrapeVarieties::getGrapeVarietyById($product['GrapeVarietyId']);
+        $sugarContent = SugarContents::getSugarContentById($product['SugarContentId']);
 
         return $this->render(null,
             [
                 'product' => $product,
                 'category' => $category,
                 'brand' => $brand,
-                'grapeVariety' => $grapeVariety
+                'grapeVariety' => $grapeVariety,
+                'sugarContent' => $sugarContent,
             ]);
     }
 
@@ -120,6 +124,7 @@ class ProductsController extends Controller
         $brands = Brands::getBrands();
         $product = Products::getProductById($id);
         $categoryId = $product['CategoryId'];
+        $sugarContents = SugarContents::getSugarContents();
 
         if (Core::getInstance()->requestMethod == 'POST') {
             $errors = [];
@@ -146,6 +151,7 @@ class ProductsController extends Controller
                     'Name' => $_POST['Name'],
                     'Type' => $_POST['Type'],
                     'Color' => $_POST['Color'],
+                    'SugarContentId' => $_POST['SugarContentId'],
                     'BrandId' => $_POST['BrandId'],
                     'Volume' => $_POST['Volume'],
                     'Strength' => $_POST['Strength'],
@@ -184,7 +190,8 @@ class ProductsController extends Controller
                 'categoryId' => $categoryId,
                 'grapeVarieties' => $grapeVarieties,
                 'brands' => $brands,
-                'product' => $product
+                'product' => $product,
+                'sugarContents' => $sugarContents,
             ]);
 
     }

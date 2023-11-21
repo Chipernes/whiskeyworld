@@ -6,6 +6,7 @@
 /** @var array|null $grapeVarieties */
 /** @var array|null $brands */
 /** @var array|null $product */
+/** @var array|null $sugarContents */
 ?>
 
 <h2 class="mt-3 mb-4 fs-1">Редагування товару</h2>
@@ -39,6 +40,15 @@
         <?php if (!empty($errors['Color'])): ?>
             <div id="colorHelp" class="form-text text-danger"><?php echo $errors['Color'] ?></div>
         <?php endif; ?>
+    </div>
+    <div class="mb-3">
+        <label for="sugarContent" class="form-label">Виберіть класифікація за вмістом цукру</label>
+        <select class="form-control" id="category" name="SugarContentId" aria-describedby="sugarContentHelp">
+            <option value="" disabled selected hidden>Виберіть класифікацію за вмістом цукру</option>
+            <?php foreach ($sugarContents as $sugarContent): ?>
+                <option value="<?= $sugarContent['SugarContentId'] ?>"><?= $sugarContent['Name'] ?></option>
+            <?php endforeach; ?>
+        </select>
     </div>
     <div class="mb-3">
         <label for="volume" class="form-label">Об'єм алкоголю <span class="text-danger">*</span></label>

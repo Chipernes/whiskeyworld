@@ -3,6 +3,7 @@
 /** @var array $product */
 /** @var array $brand */
 /** @var array $grapeVariety */
+/** @var array $sugarContent */
 ?>
 
 <div class="container">
@@ -59,6 +60,12 @@
                         <td>Колір</td>
                         <td><?= $product['Color'] ?></td>
                     </tr>
+                    <?php if (!empty($product['SugarContentId'])): ?>
+                        <tr>
+                            <td>Вміст цукру</td>
+                            <td><?= $sugarContent['Name'] ?></td>
+                        </tr>
+                    <?php endif; ?>
                     <tr>
                         <td>Смак</td>
                         <td><?= $product['Taste'] ?></td>
