@@ -44,17 +44,17 @@
                     <?php endif; ?>
                     <tr>
                         <td>Об'єм</td>
-                        <td><?= $product['Volume'] ?></td>
+                        <td><?= $product['Volume'] ?> л</td>
                     </tr>
                     <?php if (!empty($product['Aging'])): ?>
                         <tr>
                             <td>Витримка</td>
-                            <td><?= $product['Aging'] ?></td>
+                            <td><?= $product['Aging'] ?> р</td>
                         </tr>
                     <?php endif; ?>
                     <tr>
                         <td>Міцність</td>
-                        <td><?= $product['Strength'] ?></td>
+                        <td><?= $product['Strength'] ?>%</td>
                     </tr>
                     <tr>
                         <td>Колір</td>

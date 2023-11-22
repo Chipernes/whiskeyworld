@@ -52,14 +52,14 @@
     </div>
     <div class="mb-3">
         <label for="volume" class="form-label">Об'єм алкоголю <span class="text-danger">*</span></label>
-        <input type="number" class="form-control" id="volume" name="Volume" aria-describedby="volumeHelp" value="<?= $product['Volume'] ?>">
+        <input type="text" class="form-control" id="volume" name="Volume" aria-describedby="volumeHelp" value="<?= $product['Volume'] ?>">
         <?php if (!empty($errors['Volume'])): ?>
             <div id="volumeHelp" class="form-text text-danger"><?php echo $errors['Volume'] ?></div>
         <?php endif; ?>
     </div>
     <div class="mb-3">
         <label for="strength" class="form-label">Міцність алкоголю <span class="text-danger">*</span></label>
-        <input type="number" class="form-control" id="strength" name="Strength" aria-describedby="strengthHelp" value="<?= $product['Strength'] ?>">
+        <input type="text" class="form-control" id="strength" name="Strength" aria-describedby="strengthHelp" value="<?= $product['Strength'] ?>">
         <?php if (!empty($errors['Strength'])): ?>
             <div id="strengthHelp" class="form-text text-danger"><?php echo $errors['Strength'] ?></div>
         <?php endif; ?>

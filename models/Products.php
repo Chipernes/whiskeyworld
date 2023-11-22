@@ -52,6 +52,11 @@ class Products
         return null;
     }
 
+    public static function getJoinedProductWithCategory()
+    {
+        return Core::getInstance()->db->selectJoin(self::$tableName, 'Categories', 'CategoryId', 'Name', 'CategoryName');
+    }
+
     public static function getProductsInCategory($categoryId)
     {
         return Core::getInstance()->db->select(self::$tableName, '*', ['CategoryId' => $categoryId]);

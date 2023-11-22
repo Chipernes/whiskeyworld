@@ -60,6 +60,14 @@ else
                     </a>
                 </li>
                 <li>
+                    <a href="/products" class="nav-link text-white">
+                        <svg class="bi d-block mx-auto mb-1" width="20" height="20">
+                            <use xlink:href="#grid"></use>
+                        </svg>
+                        Усі напої
+                    </a>
+                </li>
+                <li>
                     <a href="/cart" class="nav-link text-white">
                         <svg class="bi d-block mx-auto mb-1" width="20" height="20">
                             <use xlink:href="#cart"></use>

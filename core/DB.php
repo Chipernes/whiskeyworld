@@ -32,6 +32,17 @@ class DB
         return $res->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    public function selectJoin($firstTableName, $secondTableName, $joinField, $selectedName, $asName)
+    {
+        if (is_string('*'))
+            $fieldsListString = "$secondTableName.$selectedName AS $asName, $firstTableName.*";
+
+        $joinPartString = 'INNER JOIN ' . $secondTableName . ' ON' . " $firstTableName.$joinField = $secondTableName.$joinField";
+        $res = $this->pdo->prepare("SELECT {$fieldsListString} FROM {$firstTableName} {$joinPartString}");
+        $res->execute();
+        return $res->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     public function update($tableName, $newValuesArray, $conditionArray)
     {
         $setPart = [];

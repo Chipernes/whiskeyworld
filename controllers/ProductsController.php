@@ -16,7 +16,12 @@ class ProductsController extends Controller
 {
     public function indexAction()
     {
-        return $this->render();
+        $joinedProductWithCategory = Products::getJoinedProductWithCategory();
+
+        return $this->render(null,
+            [
+                'joinedProductWithCategory' => $joinedProductWithCategory,
+            ]);
     }
 
     public function addAction($params)
@@ -28,6 +33,7 @@ class ProductsController extends Controller
         $categories = Categories::getCategories();
         $grapeVarieties = GrapeVarieties::getGrapeVarieties();
         $brands = Brands::getBrands();
+        $sugarContents = SugarContents::getSugarContents();
 
         if (Core::getInstance()->requestMethod == 'POST') {
             $errors = [];
@@ -90,7 +96,8 @@ class ProductsController extends Controller
                 'categories' => $categories,
                 'categoryId' => $categoryId,
                 'grapeVarieties' => $grapeVarieties,
-                'brands' => $brands
+                'brands' => $brands,
+                'sugarContents' => $sugarContents,
             ]);
     }
 
