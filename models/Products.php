@@ -52,9 +52,71 @@ class Products
         return null;
     }
 
+    public static function getAllProduct(): ?array
+    {
+        $row = Core::getInstance()->db->select(self::$tableName);
+
+        if (!empty($row))
+            return $row;
+
+        return null;
+    }
+
+    /*public static function getProductByBrandName($brandsNames): ?array
+    {
+        $joinedRows = Core::getInstance()->db->selectJoin(self::$tableName, 'Brands', 'BrandId', ['BrandId', 'Name'], ['BrandId', 'BrandName']);
+
+        foreach ($joinedRows as $joinedRow) {
+            if ($brandName == $joinedRow['BrandName']) {
+                $productRow = Core::getInstance()->db->select(self::$tableName, '*', ['BrandId' => $joinedRow['BrandId']]);
+            }
+        }
+
+        if (!empty($productRow))
+            return $productRow;
+
+        return null;
+    }*/
+
+    public static function getProductByBrandName($brandsNames): ?array
+    {
+        $productRows = [];
+
+        $brandProducts = [];
+
+        $joinedRows = Core::getInstance()->db->selectJoin(self::$tableName, 'Brands', 'BrandId', ['BrandId', 'Name'], ['BrandId', 'BrandName']);
+
+        foreach ($joinedRows as $joinedRow) {
+            if (in_array($joinedRow['BrandName'], $brandsNames)) {
+                $products = Core::getInstance()->db->select(self::$tableName, '*', ['BrandId' => $joinedRow['BrandId']]);
+                if (!empty($products)) {
+                    $brandProducts[$joinedRow['BrandName']] = $products;
+                }
+            }
+        }
+
+        foreach ($brandProducts as $brandProduct) {
+            $productRows = array_merge($productRows, $brandProduct);
+        }
+
+        if (!empty($productRows)) {
+            return $productRows;
+        }
+
+        return null;
+    }
+
+
+
+
     public static function getJoinedProductWithCategory()
     {
-        return Core::getInstance()->db->selectJoin(self::$tableName, 'Categories', 'CategoryId', 'Name', 'CategoryName');
+        return Core::getInstance()->db->selectJoin(self::$tableName, 'Categories', 'CategoryId', ['Name'], ['CategoryName']);
+    }
+
+    public static function getGroupedProduct($fieldList, $conditionArray, $groupBy)
+    {
+        return Core::getInstance()->db->selectGroup(self::$tableName, $fieldList, $conditionArray, 'AND', $groupBy);
     }
 
     public static function getProductsInCategory($categoryId)

@@ -16,10 +16,23 @@ class ProductsController extends Controller
 {
     public function indexAction()
     {
+        $brands = Brands::getBrands();
+        $products = Products::getAllProduct();
+        $groupedProductsByTypes = Products::getGroupedProduct('Type', ['Type' => 'IS NOT Null'], 'Type');
+        $groupedProductsByValues = Products::getGroupedProduct('Volume', null, 'Volume');
         $joinedProductWithCategory = Products::getJoinedProductWithCategory();
+
+        if (!empty($_GET['brand'])) {
+            $brandsNames = explode(',', $_GET['brand']);
+            $joinedProductWithCategory = Products::getProductByBrandName($brandsNames);
+        }
 
         return $this->render(null,
             [
+                'brands' => $brands,
+                'products' => $products,
+                'groupedProductsByTypes' => $groupedProductsByTypes,
+                'groupedProductsByValues' => $groupedProductsByValues,
                 'joinedProductWithCategory' => $joinedProductWithCategory,
             ]);
     }

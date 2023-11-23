@@ -32,7 +32,38 @@ class DB
         return $res->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function selectJoin($firstTableName, $secondTableName, $joinField, $selectedName, $asName)
+    public function selectGroup($tableName, $fieldsList = '*', $conditionArray = null, $conditionOperators = 'AND', $groupBy = null)
+    {
+        if (is_string($fieldsList))
+            $fieldsListString = $fieldsList;
+        elseif (is_array($fieldsList))
+            $fieldsListString = implode(', ', $fieldsList);
+
+        $wherePartString = '';
+        if (is_array($conditionArray)) {
+            $whereParts = [];
+            foreach ($conditionArray as $key => $value) {
+                if (strtoupper($value) == 'IS NOT NULL' || strtoupper($value) == 'IS NULL') {
+                    $whereParts[] = "{$key} {$value}";
+                } else {
+                    $whereParts[] = "{$key} = :{$key}";
+                }
+            }
+            $wherePartString = 'WHERE ' . implode(" $conditionOperators ", $whereParts);
+        }
+
+        $groupByString = '';
+        if (!empty($groupBy)) {
+            $groupByString = 'GROUP BY ' . $groupBy;
+        }
+
+        $res = $this->pdo->prepare("SELECT {$fieldsListString} FROM {$tableName} {$wherePartString} {$groupByString}");
+        $res->execute($conditionArray);
+        return $res->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+
+    /*public function selectJoin($firstTableName, $secondTableName, $joinField, $selectedName, $asName)
     {
         if (is_string('*'))
             $fieldsListString = "$secondTableName.$selectedName AS $asName, $firstTableName.*";
@@ -41,7 +72,26 @@ class DB
         $res = $this->pdo->prepare("SELECT {$fieldsListString} FROM {$firstTableName} {$joinPartString}");
         $res->execute();
         return $res->fetchAll(\PDO::FETCH_ASSOC);
+    }*/
+    public function selectJoin($firstTableName, $secondTableName, $joinField, $selectedNames, $asNames)
+    {
+        if (!is_array($selectedNames) || !is_array($asNames) || count($selectedNames) !== count($asNames)) {
+            return 'Invalid';
+        }
+
+        $fieldsListString = '';
+        foreach ($selectedNames as $key => $selectedName) {
+            $fieldsListString .= "$secondTableName.$selectedName AS {$asNames[$key]}, ";
+        }
+        $fieldsListString .= "$firstTableName.*";
+
+        $joinPartString = 'INNER JOIN ' . $secondTableName . ' ON ' . "$firstTableName.$joinField = $secondTableName.$joinField";
+
+        $res = $this->pdo->prepare("SELECT {$fieldsListString} FROM {$firstTableName} {$joinPartString}");
+        $res->execute();
+        return $res->fetchAll(\PDO::FETCH_ASSOC);
     }
+
 
     public function update($tableName, $newValuesArray, $conditionArray)
     {
