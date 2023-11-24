@@ -9,6 +9,7 @@
 use models\User;
 
 $brandsNames = explode(',', $_GET['brand']);
+$typesNames = explode(',', $_GET['type']);
 ?>
 
 <?php include('themes/light/svg.html') ?>
@@ -40,13 +41,14 @@ $brandsNames = explode(',', $_GET['brand']);
                     <?php endforeach; ?>
                 </ul>
             </div>
-
         </div>
         <div class="mb-3">
             <h5>Ціна</h5>
             <div>
                 Тут буде рендж інпут
-                <input type="range" name="" id="">
+                <label>
+                    <input type="range" name="">
+                </label>
             </div>
         </div>
         <div class="mb-3">
@@ -55,9 +57,13 @@ $brandsNames = explode(',', $_GET['brand']);
                 <ul class="p-0" style="list-style: none">
                     <?php foreach ($groupedProductsByTypes as $groupedProductsByType) : ?>
                         <li>
-                            <a href="" class="btn p-0 d-flex align-items-center gap-2">
+                            <a href="javascript:void(0);" onclick="toggleType('<?= $groupedProductsByType['Type'] ?>')" class="btn p-0 d-flex align-items-center gap-2">
                                 <svg width="16" height="16">
-                                    <use xlink:href="#unchecked"></use>
+                                    <?php if (in_array($groupedProductsByType['Type'], $typesNames)): ?>
+                                        <use xlink:href="#checked"></use>
+                                    <?php else: ?>
+                                        <use xlink:href="#unchecked"></use>
+                                    <?php endif; ?>
                                 </svg>
                                 <?= $groupedProductsByType['Type'] ?>
                             </a>
@@ -191,31 +197,41 @@ $brandsNames = explode(',', $_GET['brand']);
 </div>
 
 <script>
-    function toggleBrand(brandName) {
+    function toggleParameter(paramName, paramValue) {
         let currentUrl = window.location.href;
         let newUrl;
 
-        if (currentUrl.includes('?brand=')) {
-            let encodedBrandName = encodeURIComponent(brandName);
-            let regex = new RegExp(`${encodedBrandName}(?:,|$)`, 'g');
+        if (currentUrl.includes(`?${paramName}=`) || currentUrl.includes(`&${paramName}=`)) {
+            let encodedParamValue = encodeURIComponent(paramValue);
+            let regex = new RegExp(`${encodedParamValue}(?:,|$)`, 'g');
 
             if (currentUrl.match(regex)) {
                 newUrl = currentUrl.replace(regex, '');
             } else {
-                newUrl = currentUrl + ',' + encodedBrandName + ',';
+                newUrl = currentUrl + ',' + encodedParamValue + ',';
             }
         } else {
-            let encodedBrandName = encodeURIComponent(brandName);
-            newUrl = '?brand=' + encodedBrandName;
+            let encodedParamValue = encodeURIComponent(paramValue);
+            newUrl = `?${paramName}=${encodedParamValue}`;
         }
 
         newUrl = newUrl.replace(/,,/g, ',');
         newUrl = newUrl.replace(/,$/, '');
 
-        if (newUrl.endsWith('?brand=') || newUrl.endsWith('&brand=')) {
-            newUrl = newUrl.substring(0, newUrl.length - 7);
+        if (newUrl.endsWith(`?${paramName}=`) || newUrl.endsWith(`&${paramName}=`)) {
+            newUrl = newUrl.substring(0, newUrl.length - (paramName.length + 2));
         }
 
         window.location.href = newUrl;
+    }
+
+    // Використання функції для brand
+    function toggleBrand(brandName) {
+        toggleParameter('brand', brandName);
+    }
+
+    // Використання функції для type
+    function toggleType(typeName) {
+        toggleParameter('type', typeName);
     }
 </script>

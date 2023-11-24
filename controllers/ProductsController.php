@@ -24,7 +24,12 @@ class ProductsController extends Controller
 
         if (!empty($_GET['brand'])) {
             $brandsNames = explode(',', $_GET['brand']);
-            $joinedProductWithCategory = Products::getProductByBrandName($brandsNames);
+            $joinedProductWithCategory = Products::getProductsByBrandName($brandsNames);
+        }
+
+        if (!empty($_GET['type'])) {
+            $typesNames = explode(',', $_GET['type']);
+            $joinedProductWithCategory = Products::getProductsByType($typesNames);
         }
 
         return $this->render(null,
