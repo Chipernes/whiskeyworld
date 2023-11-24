@@ -8,6 +8,7 @@
 
 use models\User;
 
+$brandsNames = explode(',', $_GET['brand']);
 ?>
 
 <?php include('themes/light/svg.html') ?>
@@ -27,7 +28,11 @@ use models\User;
                         <li>
                             <a href="javascript:void(0);" onclick="toggleBrand('<?= $brand['Name'] ?>')" class="btn p-0 d-flex align-items-center gap-2">
                                 <svg width="16" height="16">
-                                    <use xlink:href="#unchecked"></use>
+                                    <?php if (in_array($brand['Name'], $brandsNames)): ?>
+                                        <use xlink:href="#checked"></use>
+                                    <?php else: ?>
+                                        <use xlink:href="#unchecked"></use>
+                                    <?php endif; ?>
                                 </svg>
                                 <?= $brand['Name'] ?>
                             </a>
@@ -144,7 +149,7 @@ use models\User;
         </div>
     </aside>
 
-    <div class="col-10 row row-cols-1 row-cols-md-4">
+    <div class="col-10 row row-cols-1 row-cols-md-4" style="height: 100%">
         <?php foreach ($joinedProductWithCategory as $item): ?>
 
             <div class="col mb-3">
@@ -206,6 +211,10 @@ use models\User;
 
         newUrl = newUrl.replace(/,,/g, ',');
         newUrl = newUrl.replace(/,$/, '');
+
+        if (newUrl.endsWith('?brand=') || newUrl.endsWith('&brand=')) {
+            newUrl = newUrl.substring(0, newUrl.length - 7);
+        }
 
         window.location.href = newUrl;
     }
