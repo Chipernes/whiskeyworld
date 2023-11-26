@@ -15,7 +15,14 @@ class UserController extends Controller
 
     public function indexAction()
     {
-        return $this->render();
+        if (!User::isAdmin())
+            return $this->error(403);
+
+        $users = User::getAllUsers();
+        return $this->render(null,
+            [
+                'users' => $users
+            ]);
     }
 
     public function registerAction()

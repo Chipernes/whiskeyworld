@@ -75,6 +75,32 @@ else
                         Кошик
                     </a>
                 </li>
+                <?php if (User::isAdmin()): ?>
+                    <li>
+                        <a href="#" class="nav-link text-white">
+                            <svg class="bi d-block mx-auto mb-1" width="20" height="20">
+                                <use xlink:href="#speedometer2"></use>
+                            </svg>
+                            Статистика
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link text-white">
+                            <svg class="bi d-block mx-auto mb-1" width="20" height="20">
+                                <use xlink:href="#table"></use>
+                            </svg>
+                            Замовлення
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/user" class="nav-link text-white">
+                            <svg class="bi d-block mx-auto mb-1" width="20" height="20">
+                                <use xlink:href="#people-circle"></use>
+                            </svg>
+                            Користувачі
+                        </a>
+                    </li>
+                <?php endif; ?>
                 <li>
                     <div class="text-end">
                         <?php if (User::isUserAuthenticated()): ?>

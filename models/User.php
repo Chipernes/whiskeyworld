@@ -76,6 +76,16 @@ class User
         return !empty($user);
     }
 
+    public static function getAllUsers(): ?array
+    {
+        $user = Core::getInstance()->db->select(self::$tableName);
+
+        if (!empty($user))
+            return $user;
+
+        return null;
+    }
+
     public static function getUserByLoginAndPassword($login, $password)
     {
         $user = Core::getInstance()->db->select(self::$tableName, '*',

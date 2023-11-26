@@ -10,11 +10,11 @@ use models\User;
     <a href="/products/add/<?= $category['CategoryId'] ?>" class="btn btn-success mt-3 mb-4">Додати товар</a>
 <?php endif; ?>
 
-<div class="row row-cols-1 row-cols-md-4 g-3">
+<div class="row row-cols-1 row-cols-md-4" style="height: 100%">
     <?php foreach ($products as $product): ?>
 
-        <div class="col">
-            <div class="card h-100 p-3" style="justify-content: space-between">
+        <div class="col mb-3">
+            <div class="card h-100 pt-3 pb-2" style="justify-content: space-between">
                 <a href="/products/view/<?= $product['ProductId'] ?>" style="text-decoration: none; color: black">
                     <?php $filePath = 'files/products/' . $product['Image']; ?>
                     <?php if (is_file($filePath)): ?>
@@ -23,14 +23,19 @@ use models\User;
                         <img style="object-fit: contain; height: 300px" src="/static/images/no-image.jpg" class="card-img-top" alt="">
                     <?php endif; ?>
 
-                    <div class="card-body">
-                        <h5 class="card-title">
+                    <div class="card-body pt-3 px-2 pb-0">
+                        <h5 class="card-title fs-6 fw-0" style="font-weight: 400">
                             <?= $category['Name'] ?>
                             <?= $product['Name'] ?>
                             <?= $product['Volume'] . ' л' ?>
                             <?= $product['Strength'] . '%' ?>
                         </h5>
                     </div>
+
+                    <div class="text-danger fs-3 px-2" style="font-weight: 400;">
+                        <?= $product['Price']?> <span class="fs-5">₴</span>
+                    </div>
+
                     <?php if (User::isAdmin()) : ?>
                         <div class="text-center">
                             <a href="/products/edit/<?= $product['ProductId'] ?>"
