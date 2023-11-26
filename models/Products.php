@@ -118,6 +118,90 @@ class Products
         return null;
     }
 
+    public static function getProductsByVolume($typesNames): ?array
+    {
+        $productRows = [];
+
+        $brandProducts = [];
+
+        $joinedRows = Core::getInstance()->db->select(self::$tableName);
+
+        foreach ($joinedRows as $joinedRow) {
+            if (in_array($joinedRow['Volume'], $typesNames)) {
+                $products = Core::getInstance()->db->select(self::$tableName, '*', ['Volume' => $joinedRow['Volume']]);
+                if (!empty($products)) {
+                    $brandProducts[$joinedRow['Volume']] = $products;
+                }
+            }
+        }
+
+        foreach ($brandProducts as $brandProduct) {
+            $productRows = array_merge($productRows, $brandProduct);
+        }
+
+        if (!empty($productRows)) {
+            return $productRows;
+        }
+
+        return null;
+    }
+
+    public static function getProductsByAging($aging): ?array
+    {
+        $productRows = [];
+
+        $brandProducts = [];
+
+        $joinedRows = Core::getInstance()->db->select(self::$tableName);
+
+        foreach ($joinedRows as $joinedRow) {
+            if (in_array($joinedRow['Aging'], $aging)) {
+                $products = Core::getInstance()->db->select(self::$tableName, '*', ['Aging' => $joinedRow['Aging']]);
+                if (!empty($products)) {
+                    $brandProducts[$joinedRow['Aging']] = $products;
+                }
+            }
+        }
+
+        foreach ($brandProducts as $brandProduct) {
+            $productRows = array_merge($productRows, $brandProduct);
+        }
+
+        if (!empty($productRows)) {
+            return $productRows;
+        }
+
+        return null;
+    }
+
+    public static function getProductsByCountry($countryNames): ?array
+    {
+        $productRows = [];
+
+        $brandProducts = [];
+
+        $joinedRows = Core::getInstance()->db->selectJoin(self::$tableName, 'Brands', 'BrandId', ['BrandId', 'Country'], ['BrandId', 'CountryName']);
+
+        foreach ($joinedRows as $joinedRow) {
+            if (in_array($joinedRow['CountryName'], $countryNames)) {
+                $products = Core::getInstance()->db->select(self::$tableName, '*', ['BrandId' => $joinedRow['BrandId']]);
+                if (!empty($products)) {
+                    $brandProducts[$joinedRow['CountryName']] = $products;
+                }
+            }
+        }
+
+        foreach ($brandProducts as $brandProduct) {
+            $productRows = array_merge($productRows, $brandProduct);
+        }
+
+        if (!empty($productRows)) {
+            return $productRows;
+        }
+
+        return null;
+    }
+
     public static function getJoinedProductWithCategory()
     {
         return Core::getInstance()->db->selectJoin(self::$tableName, 'Categories', 'CategoryId', ['Name'], ['CategoryName']);

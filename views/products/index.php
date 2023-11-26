@@ -10,6 +10,9 @@ use models\User;
 
 $brandsNames = explode(',', $_GET['brand']);
 $typesNames = explode(',', $_GET['type']);
+$valuesNames = explode(',', $_GET['value']);
+$aging = explode(',', $_GET['aging']);
+$countriesNames = explode(',', $_GET['country']);
 ?>
 
 <?php include('themes/light/svg.html') ?>
@@ -78,9 +81,13 @@ $typesNames = explode(',', $_GET['type']);
                 <ul class="p-0" style="list-style: none">
                     <?php foreach ($groupedProductsByValues as $groupedProductsByValue) : ?>
                         <li>
-                            <a href="" class="btn p-0 d-flex align-items-center gap-2">
+                            <a href="javascript:void(0);" onclick="toggleValue('<?= $groupedProductsByValue['Volume'] ?>')" class="btn p-0 d-flex align-items-center gap-2">
                                 <svg width="16" height="16">
-                                    <use xlink:href="#unchecked"></use>
+                                    <?php if (in_array($groupedProductsByValue['Volume'], $valuesNames)): ?>
+                                        <use xlink:href="#checked"></use>
+                                    <?php else: ?>
+                                        <use xlink:href="#unchecked"></use>
+                                    <?php endif; ?>
                                 </svg>
                                 <?= $groupedProductsByValue['Volume'] ?>
                             </a>
@@ -94,43 +101,63 @@ $typesNames = explode(',', $_GET['type']);
             <div>
                 <ul class="p-0" style="list-style: none">
                     <li>
-                        <a href="" class="btn p-0 d-flex align-items-center gap-2">
+                        <a href="javascript:void(0);" onclick="toggleAging('5')" class="btn p-0 d-flex align-items-center gap-2">
                             <svg width="16" height="16">
-                                <use xlink:href="#unchecked"></use>
+                                <?php if (in_array('5', $aging)): ?>
+                                    <use xlink:href="#checked"></use>
+                                <?php else: ?>
+                                    <use xlink:href="#unchecked"></use>
+                                <?php endif; ?>
                             </svg>
                             до 5 років
                         </a>
                     </li>
                     <li>
-                        <a href="" class="btn p-0 d-flex align-items-center gap-2">
+                        <a href="javascript:void(0);" onclick="toggleAging('10')" class="btn p-0 d-flex align-items-center gap-2">
                             <svg width="16" height="16">
-                                <use xlink:href="#unchecked"></use>
+                                <?php if (in_array('10', $aging)): ?>
+                                    <use xlink:href="#checked"></use>
+                                <?php else: ?>
+                                    <use xlink:href="#unchecked"></use>
+                                <?php endif; ?>
                             </svg>
                             до 10 років
                         </a>
                     </li>
                     <li>
-                        <a href="" class="btn p-0 d-flex align-items-center gap-2">
+                        <a href="javascript:void(0);" onclick="toggleAging('20')" class="btn p-0 d-flex align-items-center gap-2">
                             <svg width="16" height="16">
-                                <use xlink:href="#unchecked"></use>
+                                <?php if (in_array('20', $aging)): ?>
+                                    <use xlink:href="#checked"></use>
+                                <?php else: ?>
+                                    <use xlink:href="#unchecked"></use>
+                                <?php endif; ?>
                             </svg>
                             до 20 років
                         </a>
                     </li>
                     <li>
-                        <a href="" class="btn p-0 d-flex align-items-center gap-2">
+                        <a href="javascript:void(0);" onclick="toggleAging('30')" class="btn p-0 d-flex align-items-center gap-2">
                             <svg width="16" height="16">
-                                <use xlink:href="#unchecked"></use>
+                                <?php if (in_array('30', $aging)): ?>
+                                    <use xlink:href="#checked"></use>
+                                <?php else: ?>
+                                    <use xlink:href="#unchecked"></use>
+                                <?php endif; ?>
                             </svg>
                             до 30 років
                         </a>
                     </li>
                     <li>
-                        <a href="" class="btn p-0 d-flex align-items-center gap-2">
+                        <a href="javascript:void(0);" onclick="toggleAging('40')" class="btn p-0 d-flex align-items-center gap-2">
                             <svg width="16" height="16">
-                                <use xlink:href="#unchecked"></use>
+                                <?php if (in_array('40', $aging)): ?>
+                                    <use xlink:href="#checked"></use>
+                                <?php else: ?>
+                                    <use xlink:href="#unchecked"></use>
+                                <?php endif; ?>
                             </svg>
-                            до 45 років
+                            до 40 років
                         </a>
                     </li>
                 </ul>
@@ -142,9 +169,13 @@ $typesNames = explode(',', $_GET['type']);
                 <ul class="p-0" style="list-style: none">
                     <?php foreach ($brands as $brand) : ?>
                         <li>
-                            <a href="" class="btn p-0 d-flex align-items-center gap-2">
+                            <a href="javascript:void(0);" onclick="toggleCountry('<?= $brand['Country'] ?>')" class="btn p-0 d-flex align-items-center gap-2">
                                 <svg width="16" height="16">
-                                    <use xlink:href="#unchecked"></use>
+                                    <?php if (in_array($brand['Country'], $countriesNames)): ?>
+                                        <use xlink:href="#checked"></use>
+                                    <?php else: ?>
+                                        <use xlink:href="#unchecked"></use>
+                                    <?php endif; ?>
                                 </svg>
                                 <?= $brand['Country'] ?>
                             </a>
@@ -233,5 +264,20 @@ $typesNames = explode(',', $_GET['type']);
     // Використання функції для type
     function toggleType(typeName) {
         toggleParameter('type', typeName);
+    }
+
+    // Використання функції для value
+    function toggleValue(valueName) {
+        toggleParameter('value', valueName);
+    }
+
+    // Використання функції для aging
+    function toggleAging(aging) {
+        toggleParameter('aging', aging);
+    }
+
+    // Використання функції для country
+    function toggleCountry(countryName) {
+        toggleParameter('country', countryName);
     }
 </script>

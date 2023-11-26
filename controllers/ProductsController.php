@@ -32,6 +32,21 @@ class ProductsController extends Controller
             $joinedProductWithCategory = Products::getProductsByType($typesNames);
         }
 
+        if (!empty($_GET['value'])) {
+            $valuesNames = explode(',', $_GET['value']);
+            $joinedProductWithCategory = Products::getProductsByVolume($valuesNames);
+        }
+
+        if (!empty($_GET['aging'])) {
+            $valuesNames = explode(',', $_GET['aging']);
+            $joinedProductWithCategory = Products::getProductsByAging($valuesNames);
+        }
+
+        if (!empty($_GET['country'])) {
+            $valuesNames = explode(',', $_GET['country']);
+            $joinedProductWithCategory = Products::getProductsByCountry($valuesNames);
+        }
+
         return $this->render(null,
             [
                 'brands' => $brands,
