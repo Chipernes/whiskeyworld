@@ -85,7 +85,7 @@ else
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="nav-link text-white">
+                        <a href="/orders" class="nav-link text-white">
                             <svg class="bi d-block mx-auto mb-1" width="20" height="20">
                                 <use xlink:href="#table"></use>
                             </svg>

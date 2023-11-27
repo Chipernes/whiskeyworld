@@ -52,6 +52,16 @@ class Products
         return null;
     }
 
+    public static function getProductIdByName($productName)
+    {
+        $row = Core::getInstance()->db->select(self::$tableName, 'ProductId', ['Name' => $productName]);
+
+        if (!empty($row))
+            return $row[0]['ProductId'];
+
+        return null;
+    }
+
     public static function getAllProduct(): ?array
     {
         $row = Core::getInstance()->db->select(self::$tableName);
