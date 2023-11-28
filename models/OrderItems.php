@@ -19,6 +19,16 @@ class OrderItems
             return null;
     }
 
+    public static function getOrderItemByOrderId($id)
+    {
+        $rows = Core::getInstance()->db->select(self::$tableName, '*', ['OrderId' => $id]);
+
+        if (!empty($rows))
+            return $rows;
+        else
+            return null;
+    }
+
     public static function getOrderItems()
     {
         return Core::getInstance()->db->select(self::$tableName);

@@ -80,7 +80,7 @@ use core\Core;
         productsData[currentInputIndex].count = target.value;
     });
 
-    button.addEventListener('click', (event) => {
+    button.addEventListener('click', () => {
         let productNames = [];
         let productPrices = [];
         let productCounts = [];
@@ -92,13 +92,6 @@ use core\Core;
         });
 
         const queryParams = `productNames=${productNames.join(',')}&productPrices=${productPrices.join(',')}&productCounts=${productCounts.join(',')}`;
-
-       /* let queryParams = 'products=';
-        let productParams = [];
-        productsData.forEach(function (product) {
-            productParams.push(`${product.name},${product.price},${product.count}`);
-        });
-        queryParams += productParams.join(',');*/
 
         // Складіть URL для відправки GET-запиту
         button.href = `/orderItems/add?${queryParams}`;
