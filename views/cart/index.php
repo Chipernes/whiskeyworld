@@ -58,12 +58,12 @@ use core\Core;
 <script defer>
     const button =  document.getElementById("submitOrder");
     // Отримайте дані з таблиці та підготуйте їх до відправки
-    var productsData = [];
-    var rows = document.querySelectorAll(".table tbody tr");
+    let productsData = [];
+    const rows = document.querySelectorAll(".table tbody tr");
 
-    for (var i = 1; i < rows.length - 1; i++) {
-        var row = rows[i];
-        var productData = {
+    for (let i = 1; i < rows.length - 1; i++) {
+        let row = rows[i];
+        let productData = {
             name: encodeURIComponent(row.cells[1].textContent),
             price: parseFloat(row.cells[2].textContent),
             count: parseInt(row.cells[3].querySelector("input").value),
@@ -71,13 +71,37 @@ use core\Core;
         productsData.push(productData);
     }
 
-    // Підготуйте дані для додавання до URL
-    var queryParams = productsData.map(function (product, index) {
-        return `product${index + 1}Name=${product.name}&product${index + 1}Price=${product.price}&product${index + 1}Count=${product.count}`;
-    }).join('&');
+    const countInputs = document.querySelectorAll('.table tbody tr td input');
 
-    // Складіть URL для відправки GET-запиту
-    var url = `/orderItems/add?${queryParams}`;
-    button.href = url;
+    let tbody = document.querySelector(".table tbody");
+    tbody.addEventListener('input', (event) => {
+        let target = event.target;
+        let currentInputIndex = Array.from(countInputs).indexOf(target);
+        productsData[currentInputIndex].count = target.value;
+    });
+
+    button.addEventListener('click', (event) => {
+        let productNames = [];
+        let productPrices = [];
+        let productCounts = [];
+
+        productsData.forEach(function (product) {
+            productNames.push(product.name);
+            productPrices.push(product.price);
+            productCounts.push(product.count);
+        });
+
+        const queryParams = `productNames=${productNames.join(',')}&productPrices=${productPrices.join(',')}&productCounts=${productCounts.join(',')}`;
+
+       /* let queryParams = 'products=';
+        let productParams = [];
+        productsData.forEach(function (product) {
+            productParams.push(`${product.name},${product.price},${product.count}`);
+        });
+        queryParams += productParams.join(',');*/
+
+        // Складіть URL для відправки GET-запиту
+        button.href = `/orderItems/add?${queryParams}`;
+    });
 </script>
 
