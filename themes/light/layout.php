@@ -77,7 +77,7 @@ else
                 </li>
                 <?php if (User::isAdmin()): ?>
                     <li>
-                        <a href="#" class="nav-link text-white">
+                        <a href="/statistics" class="nav-link text-white">
                             <svg class="bi d-block mx-auto mb-1" width="20" height="20">
                                 <use xlink:href="#speedometer2"></use>
                             </svg>
