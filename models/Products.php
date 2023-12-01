@@ -78,7 +78,7 @@ class Products
 
         $brandProducts = [];
 
-        $joinedRows = Core::getInstance()->db->selectJoin(self::$tableName, 'Brands', 'BrandId', ['BrandId', 'Name'], ['BrandId', 'BrandName']);
+        $joinedRows = Core::getInstance()->db->selectJoin(['Brands', 'Products'], ['BrandId'], ['Brands.Name', 'Products.*'], ['BrandName', null]);
 
         foreach ($joinedRows as $joinedRow) {
             if (in_array($joinedRow['BrandName'], $brandsNames)) {
@@ -214,7 +214,7 @@ class Products
 
     public static function getJoinedProductWithCategory()
     {
-        return Core::getInstance()->db->selectJoin(self::$tableName, 'Categories', 'CategoryId', ['Name'], ['CategoryName']);
+        return Core::getInstance()->db->selectJoin([self::$tableName, 'Categories'], ['CategoryId', null], ['Categories.Name', 'Products.*'], ['CategoryName']);
     }
 
     public static function getGroupedProduct($fieldList, $conditionArray, $groupBy)

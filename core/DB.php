@@ -69,7 +69,7 @@ class DB
         }
 
         $fieldsListString = implode(', ', array_map(function ($selected, $as) {
-            return "$selected AS $as";
+            return ($as !== null) ? "$selected AS $as" : $selected;
         }, $selectedFields, $asAliases));
 
         $joinPartString = '';
