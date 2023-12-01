@@ -1,15 +1,25 @@
 <?php
 
 /* @var array $orders **/
+/* @var array $products **/
+/* @var array $categories **/
+/* @var array $totalPriceOfProductsInCategories **/
+/* @var array $totalPopularity **/
 
 ?>
 
 <h1 class="mt-4 mb-5">Статистика</h1>
-<div id="main" style="width: 600px;height:400px;"></div>
+<div id="orderStatistic" style="width: 100%; height:400px;"></div>
+<div id="orderPopularityStatistic" style="width: 100%; height:500px;"></div>
+<div id="totalProductsCountAndPrice" style="width: 100%;height: 500px;"></div>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <script type="text/javascript">
-    let myChart = echarts.init(document.getElementById('main'));
-    option = {
+    // Статистика замовлень на певну суму
+    let orderStatistic = echarts.init(document.getElementById('orderStatistic'));
+    orderStatisticOption = {
+        title: {
+            text: 'Статистика замовлень на певну суму'
+        },
         xAxis: {
             <?php
                 $orderIds = '';
@@ -34,35 +44,88 @@
             }
         ]
     };
-    myChart.setOption(option);
-</script>
-<!--<script type="text/javascript">
-    // Initialize the echarts instance based on the prepared dom
-    let myChart = echarts.init(document.getElementById('main'));
+    orderStatistic.setOption(orderStatisticOption);
 
-    // Specify the configuration items and data for the chart
-    let option = {
+
+    // Статистика популярності товарів за замовленнями
+    let orderPopularityStatistic = echarts.init(document.getElementById('orderPopularityStatistic'));
+    orderPopularityOption = {
         title: {
-            text: 'ECharts Getting Started Example'
+            text: 'Статистика популярності товарів за замовленнями'
         },
-        tooltip: {},
-        legend: {
-            data: ['sales']
+        grid: {
+            bottom: 150,
         },
         xAxis: {
-            data: ['Shirts', 'Cardigans', 'Chiffons', 'Pants', 'Heels', 'Socks']
+            <?php
+            $categoriesName = '';
+            foreach ($categories as $category) {
+                $categoriesName .= "'" . $category['Name'] . "', ";
+            }
+            ?>
+            data: [<?php echo $categoriesName?>],
+            axisLabel: {
+                interval: 0,
+                rotate: 45,
+            }
         },
         yAxis: {},
         series: [
             {
-                name: 'sales',
+                <?php
+                $orderTotalPopularity = '';
+                foreach ($totalPopularity as $item) {
+                    $orderTotalPopularity .= "'" . $item['TotalCount'] . "', ";
+                }
+                ?>
+                data: [<?php echo $orderTotalPopularity?>],
                 type: 'bar',
-                data: [5, 20, 36, 10, 10, 20]
+                smooth: true
+            }
+        ]
+    };
+    orderPopularityStatistic.setOption(orderPopularityOption);
+
+
+    // Загальна вартість продуктів у кожній категорії
+    let totalProductsCountAndPrice = echarts.init(document.getElementById('totalProductsCountAndPrice'));
+
+    totalProductsCountAndPriceOption = {
+        title: {
+            text: 'Загальна вартість продуктів у кожній категорії'
+        },
+        grid: {
+            bottom: 150,
+        },
+        xAxis: {
+            <?php
+            $categoriesName = '';
+            foreach ($categories as $category) {
+                $categoriesName .= "'" . $category['Name'] . "', ";
+            }
+            ?>
+            data: [<?php echo $categoriesName?>],
+            axisLabel: {
+                interval: 0,
+                rotate: 45,
+            }
+        },
+        yAxis: {},
+        series: [
+            {
+                type: 'bar',
+                <?php
+                $totalPrices = '';
+                foreach ($totalPriceOfProductsInCategories as $totalPriceOfProductsInCategory) {
+                    $totalPrices .= "'" . $totalPriceOfProductsInCategory['TotalCategoryPrice'] . "', ";
+                }
+                ?>
+                data: [<?php echo $totalPrices?> 30000, 30000, 30000, 30000, 30000, 30000, 30000, 30000],
             }
         ]
     };
 
-    // Display the chart using the configuration items and data just specified.
-    myChart.setOption(option);
-</script>-->
+    totalProductsCountAndPrice.setOption(totalProductsCountAndPriceOption);
+
+</script>
 

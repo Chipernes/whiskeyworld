@@ -62,36 +62,30 @@ class DB
         return $res->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-
-    /*public function selectJoin($firstTableName, $secondTableName, $joinField, $selectedName, $asName)
+    public function selectJoin($tableNames, $joinFields, $selectedFields, $asAliases, $groupBy = [])
     {
-        if (is_string('*'))
-            $fieldsListString = "$secondTableName.$selectedName AS $asName, $firstTableName.*";
-
-        $joinPartString = 'INNER JOIN ' . $secondTableName . ' ON' . " $firstTableName.$joinField = $secondTableName.$joinField";
-        $res = $this->pdo->prepare("SELECT {$fieldsListString} FROM {$firstTableName} {$joinPartString}");
-        $res->execute();
-        return $res->fetchAll(\PDO::FETCH_ASSOC);
-    }*/
-    public function selectJoin($firstTableName, $secondTableName, $joinField, $selectedNames, $asNames)
-    {
-        if (!is_array($selectedNames) || !is_array($asNames) || count($selectedNames) !== count($asNames)) {
-            return 'Invalid';
+        if (!is_array($tableNames) || !is_array($joinFields) || !is_array($selectedFields) || !is_array($asAliases)) {
+            return 'Invalid inputted value';
         }
 
-        $fieldsListString = '';
-        foreach ($selectedNames as $key => $selectedName) {
-            $fieldsListString .= "$secondTableName.$selectedName AS {$asNames[$key]}, ";
+        $fieldsListString = implode(', ', array_map(function ($selected, $as) {
+            return "$selected AS $as";
+        }, $selectedFields, $asAliases));
+
+        $joinPartString = '';
+        for ($i = 0; $i < count($tableNames) - 1; $i++) {
+            $joinPartString .= " INNER JOIN {$tableNames[$i + 1]} ON {$tableNames[$i]}.{$joinFields[$i]} = {$tableNames[$i + 1]}.{$joinFields[$i]}";
         }
-        $fieldsListString .= "$firstTableName.*";
 
-        $joinPartString = 'INNER JOIN ' . $secondTableName . ' ON ' . "$firstTableName.$joinField = $secondTableName.$joinField";
+        $groupByString = '';
+        if (!empty($groupBy)) {
+            $groupByString = ' GROUP BY ' . implode(', ', $groupBy);
+        }
 
-        $res = $this->pdo->prepare("SELECT {$fieldsListString} FROM {$firstTableName} {$joinPartString}");
+        $res = $this->pdo->prepare("SELECT $fieldsListString FROM {$tableNames[0]} $joinPartString $groupByString");
         $res->execute();
         return $res->fetchAll(\PDO::FETCH_ASSOC);
     }
-
 
     public function update($tableName, $newValuesArray, $conditionArray)
     {

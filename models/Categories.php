@@ -60,6 +60,16 @@ class Categories
             return null;
     }
 
+    public static function getGroupedCategories($fieldList, $conditionArray, $groupBy)
+    {
+        return Core::getInstance()->db->selectGroup(self::$tableName, $fieldList, $conditionArray, 'AND', $groupBy);
+    }
+
+    public static function getJoinedCategory($tableNames, $joinFields, $selectedFields, $asAliases, $groupBy = [])
+    {
+        return Core::getInstance()->db->selectJoin($tableNames, $joinFields, $selectedFields, $asAliases, $groupBy);
+    }
+
     public static function deleteCategory($id)
     {
         self::deleteImageFile($id);
