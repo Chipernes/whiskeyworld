@@ -190,13 +190,13 @@ class Products
 
         $brandProducts = [];
 
-        $joinedRows = Core::getInstance()->db->selectJoin(self::$tableName, 'Brands', 'BrandId', ['BrandId', 'Country'], ['BrandId', 'CountryName']);
+        $joinedRows = Core::getInstance()->db->selectJoin(['Brands', 'Products'], ['BrandId'], ['Brands.Country', 'Products.*'], ['BrandCountry', null]);
 
         foreach ($joinedRows as $joinedRow) {
-            if (in_array($joinedRow['CountryName'], $countryNames)) {
+            if (in_array($joinedRow['BrandCountry'], $countryNames)) {
                 $products = Core::getInstance()->db->select(self::$tableName, '*', ['BrandId' => $joinedRow['BrandId']]);
                 if (!empty($products)) {
-                    $brandProducts[$joinedRow['CountryName']] = $products;
+                    $brandProducts[$joinedRow['BrandCountry']] = $products;
                 }
             }
         }

@@ -24,6 +24,11 @@ class Brands
         return Core::getInstance()->db->select(self::$tableName);
     }
 
+    public static function getGroupedBrand($groupBy)
+    {
+        return Core::getInstance()->db->selectGroup(self::$tableName, 'Country', null, 'AND', $groupBy);
+    }
+
     public static function addBrand($name, $country)
     {
         Core::getInstance()->db->insert(

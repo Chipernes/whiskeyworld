@@ -4,6 +4,7 @@
 /** @var array $products*/
 /** @var array $groupedProductsByTypes*/
 /** @var array $groupedProductsByValues*/
+/** @var array $groupedCountries*/
 /** @var array $joinedProductWithCategory*/
 
 use models\User;
@@ -167,17 +168,17 @@ $countriesNames = explode(',', $_GET['country']);
             <h5>Країна</h5>
             <div>
                 <ul class="p-0" style="list-style: none">
-                    <?php foreach ($brands as $brand) : ?>
+                    <?php foreach ($groupedCountries as $groupedCountry) : ?>
                         <li>
-                            <a href="javascript:void(0);" onclick="toggleCountry('<?= $brand['Country'] ?>')" class="btn p-0 d-flex align-items-center gap-2">
+                            <a href="javascript:void(0);" onclick="toggleCountry('<?= $groupedCountry['Country'] ?>')" class="btn p-0 d-flex align-items-center gap-2">
                                 <svg width="16" height="16">
-                                    <?php if (in_array($brand['Country'], $countriesNames)): ?>
+                                    <?php if (in_array($groupedCountry['Country'], $countriesNames)): ?>
                                         <use xlink:href="#checked"></use>
                                     <?php else: ?>
                                         <use xlink:href="#unchecked"></use>
                                     <?php endif; ?>
                                 </svg>
-                                <?= $brand['Country'] ?>
+                                <?= $groupedCountry['Country'] ?>
                             </a>
                         </li>
                     <?php endforeach; ?>

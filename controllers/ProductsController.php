@@ -20,6 +20,7 @@ class ProductsController extends Controller
         $products = Products::getAllProduct();
         $groupedProductsByTypes = Products::getGroupedProduct('Type', ['Type' => 'IS NOT Null'], 'Type');
         $groupedProductsByValues = Products::getGroupedProduct('Volume', null, 'Volume');
+        $groupedCountries = Brands::getGroupedBrand('Country');
         $joinedProductWithCategory = Products::getJoinedProductWithCategory();
 
         if (!empty($_GET['brand'])) {
@@ -53,6 +54,7 @@ class ProductsController extends Controller
                 'products' => $products,
                 'groupedProductsByTypes' => $groupedProductsByTypes,
                 'groupedProductsByValues' => $groupedProductsByValues,
+                'groupedCountries' => $groupedCountries,
                 'joinedProductWithCategory' => $joinedProductWithCategory,
             ]);
     }
