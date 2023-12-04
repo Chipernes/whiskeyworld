@@ -120,7 +120,7 @@
                     $totalPrices .= "'" . $totalPriceOfProductsInCategory['TotalCategoryPrice'] . "', ";
                 }
                 ?>
-                data: [<?php echo $totalPrices?> 30000, 30000, 30000, 30000, 30000, 30000, 30000, 30000],
+                data: [<?php echo $totalPrices?>],
             }
         ]
     };
