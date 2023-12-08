@@ -100,6 +100,14 @@ else
                             Користувачі
                         </a>
                     </li>
+                    <li>
+                        <a href="/user/cabinet" class="nav-link text-white">
+                            <svg class="bi d-block mx-auto mb-1" width="20" height="20">
+                                <use xlink:href="#people-circle"></use>
+                            </svg>
+                            Особистик кабінет
+                        </a>
+                    </li>
                 <?php endif; ?>
                 <li>
                     <div class="text-end">

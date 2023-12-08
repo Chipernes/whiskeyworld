@@ -42,12 +42,16 @@ class User
 
     public static function updateUser($id, $updatesArray)
     {
-        $updatesArray = Utils::filterArray($updatesArray, ['Firstname', 'Lastname']);
+        $updatesArray = Utils::filterArray($updatesArray, ['Email', 'Login', 'Password', 'Firstname', 'Lastname', 'BirthDate', 'GenderId']);
         Core::getInstance()->db->update(
             self::$tableName,
             $updatesArray,
             ['UserId' => $id]
         );
+
+        self::logoutUser();
+        $updatedCurrentUser = self::getAllUsers()[$id - 1];
+        self::authenticatedUser($updatedCurrentUser);
     }
 
     public static function deleteUser($conditionArray)

@@ -26,6 +26,67 @@ class UserController extends Controller
             ]);
     }
 
+    public function cabinetAction()
+    {
+        $currentUser = User::getCurrentAuthenticatedUser();
+        $genders = Genders::getAllGenders();
+        return $this->render(null,
+            [
+                'currentUser' => $currentUser,
+                'genders' => $genders,
+            ]
+        );
+    }
+
+    public function editAction()
+    {
+        $currentUser = User::getCurrentAuthenticatedUser();
+        $genders = Genders::getAllGenders();
+
+        if (Core::getInstance()->requestMethod == 'POST') {
+            $errors = [];
+            if (empty($_POST['login']))
+                $errors['login'] = 'Назва категорії не вказана';
+
+            if (empty($errors)) {
+                $valuesArray = [
+                    'Email' => $_POST['email'],
+                    'Login' => $_POST['login'],
+                    'Password' => md5($_POST['passwordNew']),
+                    'Firstname' => $_POST['firstname'],
+                    'Lastname' => $_POST['lastname'],
+                    'BirthDate' => $_POST['birthDate'],
+                    'GenderId' => $_POST['genderId'],
+                ];
+
+                foreach ($valuesArray as $item => $value) {
+                    if ($value == '')
+                        $valuesArray[$item] = null;
+                }
+
+                if (md5($_POST['passwordNew']) == $currentUser['Password']) {
+                    User::updateUser($currentUser['UserId'], $valuesArray);
+                }
+
+                $this->redirect('/user/cabinet');
+            } else {
+                return $this->render(null,
+                    [
+                        'errors' => $errors,
+                        'model' => $currentUser,
+                        'genders' => $genders,
+                    ]);
+            }
+        }
+
+        return $this->render(null,
+            [
+                'genders' => $genders,
+                'model' => $currentUser,
+            ]
+        );
+    }
+
     public function registerAction()
     {
         if (User::isUserAuthenticated())
