@@ -12,10 +12,18 @@ use models\User;
 
 <div class="row row-cols-1 row-cols-md-4" style="height: 100%">
     <?php foreach ($products as $product): ?>
+        <?php if ($product['Visibility'] == 0 && !User::isAdmin()): ?>
+            <div class="col mb-3" style="display: none">
+        <?php else: ?>
+            <div class="col mb-3">
+        <?php endif; ?>
 
-        <div class="col mb-3">
             <div class="card h-100 pt-3 pb-2" style="justify-content: space-between">
                 <a href="/products/view/<?= $product['ProductId'] ?>" style="text-decoration: none; color: black">
+                    <?php if ($product['Visibility'] == 0 && User::isAdmin()): ?>
+                    <div class="col mb-3" style="opacity: 0.5">
+                    <?php endif; ?>
+
                     <?php $filePath = 'files/products/' . $product['Image']; ?>
                     <?php if (is_file($filePath)): ?>
                         <img style="object-fit: contain; height: 300px" src="/<?= $filePath ?>" class="card-img-top" alt="">
@@ -35,6 +43,10 @@ use models\User;
                     <div class="text-danger fs-3 px-2" style="font-weight: 400;">
                         <?= $product['Price']?> <span class="fs-5">₴</span>
                     </div>
+
+                <?php if ($product['Visibility'] == 0 && User::isAdmin()): ?>
+                    </div>
+                <?php endif; ?>
 
                     <?php if (User::isAdmin()) : ?>
                         <div class="text-center">

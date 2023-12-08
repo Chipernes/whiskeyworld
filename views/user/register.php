@@ -1,6 +1,7 @@
 <?php
 /** @var array $errors */
 /** @var array $model */
+/** @var array $genders */
 \core\Core::getInstance()->pageParams['title'] = 'Реєстрація на сайті';
 ?>
 
@@ -46,8 +47,23 @@
             <label class="form-label" for="lastname">Прізвище</label>
             <input class="form-control" type="text" name="lastname" id="lastname" aria-describedby="lastnameHelp" value="<?= $model['lastname'] ?>">
             <?php if (!empty($errors['lastname'])): ?>
-                <div id="lastnameHelp" class="form-text text-danger"><?php echo $errors['passwordRepeat'] ?></div>
+                <div id="lastnameHelp" class="form-text text-danger"><?php echo $errors['lastname'] ?></div>
             <?php endif; ?>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="birthDate">Дата народження</label>
+            <input class="form-control" type="date" name="birthDate" id="birthDate" aria-describedby="birthDateHelp" value="<?= $model['birthDate'] ?>">
+            <?php if (!empty($errors['birthDate'])): ?>
+                <div id="firstnameHelp" class="form-text text-danger"><?php echo $errors['birthDate'] ?></div>
+            <?php endif; ?>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="gender">Стать</label>
+            <select class="form-control" id="gender" name="genderId" aria-describedby="genderHelp">
+                <?php foreach ($genders as $gender): ?>
+                    <option value="<?= $gender['GenderId'] ?>"><?= $gender['Name'] ?></option>
+                <?php endforeach; ?>
+            </select>
         </div>
         <button type="submit" class="btn btn-primary">Зареєструватися</button>
     </form>

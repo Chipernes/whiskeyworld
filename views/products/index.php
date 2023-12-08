@@ -189,29 +189,40 @@ $countriesNames = explode(',', $_GET['country']);
 
     <div class="col-10 row row-cols-1 row-cols-md-4" style="height: 100%">
         <?php foreach ($joinedProductWithCategory as $item): ?>
-
-            <div class="col mb-3">
+            <?php if ($item['Visibility'] == 0 && !User::isAdmin()): ?>
+                <div class="col mb-3" style="display: none">
+            <?php else: ?>
+                    <div class="col mb-3">
+            <?php endif; ?>
                 <div class="card h-100 pt-3 pb-2" style="justify-content: space-between">
                     <a href="/products/view/<?= $item['ProductId'] ?>" style="text-decoration: none; color: black; display: flex; flex-direction: column; flex: 1 1 auto;">
-                        <?php $filePath = 'files/products/' . $item['Image']; ?>
-                        <?php if (is_file($filePath)): ?>
-                            <img style="object-fit: contain; height: 300px" src="/<?= $filePath ?>" class="card-img-top" alt="">
-                        <?php else: ?>
-                            <img style="object-fit: contain; height: 300px" src="/static/images/no-image.jpg" class="card-img-top" alt="">
+                        <?php if ($item['Visibility'] == 0 && User::isAdmin()): ?>
+                            <div class="col mb-3" style="opacity: 0.5">
                         <?php endif; ?>
 
-                        <div class="card-body pt-3 px-2 pb-0">
-                            <h5 class="card-title fs-6 fw-0" style="font-weight: 400">
-                                <?= $item['CategoryName'] ?>
-                                <?= $item['Name'] ?>
-                                <?= $item['Volume'] . ' л' ?>
-                                <?= $item['Strength'] . '%' ?>
-                            </h5>
-                        </div>
+                            <?php $filePath = 'files/products/' . $item['Image']; ?>
+                            <?php if (is_file($filePath)): ?>
+                                <img style="object-fit: contain; height: 300px" src="/<?= $filePath ?>" class="card-img-top" alt="">
+                            <?php else: ?>
+                                <img style="object-fit: contain; height: 300px" src="/static/images/no-image.jpg" class="card-img-top" alt="">
+                            <?php endif; ?>
 
-                        <div class="text-danger fs-3 px-2" style="font-weight: 400;">
-                            <?= $item['Price']?> <span class="fs-5">₴</span>
-                        </div>
+                            <div class="card-body pt-3 px-2 pb-0">
+                                <h5 class="card-title fs-6 fw-0" style="font-weight: 400">
+                                    <?= $item['CategoryName'] ?>
+                                    <?= $item['Name'] ?>
+                                    <?= $item['Volume'] . ' л' ?>
+                                    <?= $item['Strength'] . '%' ?>
+                                </h5>
+                            </div>
+
+                            <div class="text-danger fs-3 px-2" style="font-weight: 400;">
+                                <?= $item['Price']?> <span class="fs-5">₴</span>
+                            </div>
+                        <?php if ($item['Visibility'] == 0 && User::isAdmin()): ?>
+                            </div>
+                        <?php endif; ?>
+
 
                         <?php if (User::isAdmin()) : ?>
                             <div class="text-center">

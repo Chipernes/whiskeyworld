@@ -4,6 +4,7 @@ namespace controllers;
 
 use core\Controller;
 use core\Core;
+use models\Genders;
 use models\User;
 
 class UserController extends Controller
@@ -51,12 +52,15 @@ class UserController extends Controller
                         'model' => $_POST
                     ]);
             } else {
-                User::addUser($_POST['email'], $_POST['login'], $_POST['password'], $_POST['firstname'], $_POST['lastname']);
+                User::addUser($_POST['email'], $_POST['login'], $_POST['password'], $_POST['firstname'], $_POST['lastname'], $_POST['birthDate'], $_POST['gender']);
                 return $this->renderView('register-success');
             }
 
         } else {
-            return $this->render();
+            $genders = Genders::getAllGenders();
+            return $this->render(null,
+                ['genders' => $genders],
+            );
         }
     }
 
