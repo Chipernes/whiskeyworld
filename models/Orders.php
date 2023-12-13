@@ -23,6 +23,15 @@ class Orders
     {
         return Core::getInstance()->db->select(self::$tableName);
     }
+    public static function getJoinedOrdersWithUsers()
+    {
+        return Core::getInstance()->db->selectJoin(['Orders', 'Users'], ['UserId'], ['Users.Firstname', 'Users.Lastname', 'Orders.*'], ['Firstname', 'Lastname', null]);
+    }
+
+    public static function getJoinedOrdersWithStatuses()
+    {
+        return Core::getInstance()->db->selectJoin(['Orders', 'Statuses'], ['StatusId'], ['Statuses.Name', 'Orders.*'], ['StatusName', null], [], ['OrderId']);
+    }
 
     public static function getaLastOrderId()
     {
@@ -47,7 +56,6 @@ class Orders
 
     public static function updateOrderItem($id, $updatesArray)
     {
-        $updatesArray = Utils::filterArray($updatesArray, ['UserId', 'Date']);
         Core::getInstance()->db->update(
             self::$tableName,
             $updatesArray,

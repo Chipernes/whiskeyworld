@@ -20,9 +20,11 @@ class UserController extends Controller
             return $this->error(403);
 
         $users = User::getAllUsers();
+        $currentAuthenticatedUser = User::getCurrentAuthenticatedUser();
         return $this->render(null,
             [
-                'users' => $users
+                'users' => $users,
+                'currentAuthenticatedUser' => $currentAuthenticatedUser,
             ]);
     }
 
@@ -155,5 +157,19 @@ class UserController extends Controller
     {
         User::logoutUser();
         $this->redirect('/');
+    }
+
+    public function setAdminAction()
+    {
+        $id = intval($_GET['user']);
+        User::setAdminRights($id);
+        $this->redirect('/user');
+    }
+
+    public function deleteAdminAction()
+    {
+        $id = intval($_GET['user']);
+        User::deleteAdminRights($id);
+        $this->redirect('/user');
     }
 }

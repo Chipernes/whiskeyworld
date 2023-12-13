@@ -54,6 +54,24 @@ class User
         self::authenticatedUser($updatedCurrentUser);
     }
 
+    public static function setAdminRights($id)
+    {
+        Core::getInstance()->db->update(
+            self::$tableName,
+            ['AccessLevel' => 10],
+            ['UserId' => $id],
+        );
+    }
+
+    public static function deleteAdminRights($id)
+    {
+        Core::getInstance()->db->update(
+            self::$tableName,
+            ['AccessLevel' => 1],
+            ['UserId' => $id],
+        );
+    }
+
     public static function deleteUser($conditionArray)
     {
         Core::getInstance()->db->delete(

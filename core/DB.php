@@ -32,7 +32,7 @@ class DB
         return $res->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function selectGroup($tableName, $fieldsList = '*', $conditionArray = null, $conditionOperators = 'AND', $groupBy = null)
+    public function selectGroup($tableName, $fieldsList = '*', $conditionArray = null, $conditionOperators = 'AND', $groupBy = null, $orderBy = null)
     {
         if (is_string($fieldsList))
             $fieldsListString = $fieldsList;
@@ -57,12 +57,17 @@ class DB
             $groupByString = 'GROUP BY ' . $groupBy;
         }
 
-        $res = $this->pdo->prepare("SELECT {$fieldsListString} FROM {$tableName} {$wherePartString} {$groupByString}");
+        $orderByString = '';
+        if (!empty($orderBy)) {
+            $orderByString = ' ORDER BY ' . implode(', ', $orderBy);
+        }
+
+        $res = $this->pdo->prepare("SELECT {$fieldsListString} FROM {$tableName} {$wherePartString} {$groupByString} {$orderByString}");
         $res->execute($conditionArray);
         return $res->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function selectJoin($tableNames, $joinFields, $selectedFields, $asAliases, $groupBy = [])
+    public function selectJoin($tableNames, $joinFields, $selectedFields, $asAliases, $groupBy = [], $orderBy = null)
     {
         if (!is_array($tableNames) || !is_array($joinFields) || !is_array($selectedFields) || !is_array($asAliases)) {
             return 'Invalid inputted value';
@@ -82,7 +87,12 @@ class DB
             $groupByString = ' GROUP BY ' . implode(', ', $groupBy);
         }
 
-        $res = $this->pdo->prepare("SELECT $fieldsListString FROM {$tableNames[0]} $joinPartString $groupByString");
+        $orderByString = '';
+        if (!empty($orderBy)) {
+            $orderByString = ' ORDER BY ' . implode(', ', $orderBy);
+        }
+
+        $res = $this->pdo->prepare("SELECT $fieldsListString FROM {$tableNames[0]} $joinPartString $groupByString $orderByString");
         $res->execute();
         return $res->fetchAll(\PDO::FETCH_ASSOC);
     }

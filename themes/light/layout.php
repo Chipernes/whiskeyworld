@@ -100,6 +100,8 @@ else
                             Користувачі
                         </a>
                     </li>
+                <?php endif; ?>
+                <?php if (User::isUserAuthenticated()): ?>
                     <li>
                         <a href="/user/cabinet" class="nav-link text-white">
                             <svg class="bi d-block mx-auto mb-1" width="20" height="20">

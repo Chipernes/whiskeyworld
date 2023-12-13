@@ -61,6 +61,9 @@ class ProductsController extends Controller
 
     public function addAction($params)
     {
+        if (!User::isAdmin())
+            return $this->error(403);
+
         $categoryId = intval($params[0]);
         if (empty($categoryId))
             $categoryId = null;
