@@ -19,7 +19,7 @@ class User
             );
     }
 
-    public static function addUser($email, $login, $password, $firstname, $lastname, $birthdate = null, $gender = null)
+    public static function addUser($email, $login, $password, $firstname, $lastname, $birthdate = null, $genderId = null)
     {
         Core::getInstance()->db->insert(
             self::$tableName,
@@ -30,7 +30,7 @@ class User
                 'Firstname' => $firstname,
                 'Lastname' => $lastname,
                 'BirthDate' => $birthdate,
-                'Gender' => $gender
+                'GenderId' => $genderId
             ]
         );
     }
@@ -42,7 +42,7 @@ class User
 
     public static function updateUser($id, $updatesArray)
     {
-        $updatesArray = Utils::filterArray($updatesArray, ['Email', 'Login', 'Password', 'Firstname', 'Lastname', 'BirthDate', 'GenderId']);
+        //$updatesArray = Utils::filterArray($updatesArray, ['Email', 'Login', 'Password', 'Firstname', 'Lastname', 'BirthDate', 'GenderId']);
         Core::getInstance()->db->update(
             self::$tableName,
             $updatesArray,
@@ -106,6 +106,11 @@ class User
             return $user;
 
         return null;
+    }
+
+    public static function getGroupedGenders(): ?array
+    {
+        return Core::getInstance()->db->selectGroup(self::$tableName, 'GenderId, COUNT(GenderId) AS GenderCount', null, 'AND', 'GenderId');
     }
 
     public static function getUserByLoginAndPassword($login, $password)

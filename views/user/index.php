@@ -1,6 +1,7 @@
 <?php
 /** @var array $users */
 /** @var array $currentAuthenticatedUser */
+/** @var array $genders */
 ?>
 
 <h1 class="mt-4 mb-5">Список всіх користувачів магазину</h1>
@@ -30,7 +31,13 @@
                 <th><?= $user['Firstname'] ?></th>
                 <th><?= $user['Lastname'] ?></th>
                 <th><?= $user['BirthDate'] ?></th>
-                <th><?= $user['Gender'] ?></th>
+                <th>
+                    <?php foreach ($genders as $gender) {
+                        if ($gender['GenderId'] == $user['GenderId'])
+                            echo $gender['Name'];
+                    }
+                    ?>
+                </th>
                 <th>
                     <?php if ($currentAuthenticatedUser['Login'] == 'Admin') : ?>
                         <?php if ($user['AccessLevel'] == 10): ?>

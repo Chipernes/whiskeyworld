@@ -21,10 +21,12 @@ class UserController extends Controller
 
         $users = User::getAllUsers();
         $currentAuthenticatedUser = User::getCurrentAuthenticatedUser();
+        $genders = Genders::getAllGenders();
         return $this->render(null,
             [
                 'users' => $users,
                 'currentAuthenticatedUser' => $currentAuthenticatedUser,
+                'genders' => $genders,
             ]);
     }
 
@@ -115,7 +117,7 @@ class UserController extends Controller
                         'model' => $_POST
                     ]);
             } else {
-                User::addUser($_POST['email'], $_POST['login'], $_POST['password'], $_POST['firstname'], $_POST['lastname'], $_POST['birthDate'], $_POST['gender']);
+                User::addUser($_POST['email'], $_POST['login'], $_POST['password'], $_POST['firstname'], $_POST['lastname'], $_POST['birthDate'], $_POST['genderId']);
                 return $this->renderView('register-success');
             }
 

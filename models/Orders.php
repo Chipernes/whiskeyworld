@@ -23,6 +23,17 @@ class Orders
     {
         return Core::getInstance()->db->select(self::$tableName);
     }
+
+    public static function getGroupedOrderStatuses(): ?array
+    {
+        return Core::getInstance()->db->selectGroup(self::$tableName, 'StatusId, COUNT(StatusId) AS StatusCount', null, 'AND', 'StatusId');
+    }
+
+    public static function getGroupedOrdersByDateAndPrice()
+    {
+        return Core::getInstance()->db->selectGroup(self::$tableName, 'Date, SUM(TotalPrice) AS TotalPrice', null, 'AND', 'Date');
+    }
+
     public static function getJoinedOrdersWithUsers()
     {
         return Core::getInstance()->db->selectJoin(['Orders', 'Users'], ['UserId'], ['Users.Firstname', 'Users.Lastname', 'Orders.*'], ['Firstname', 'Lastname', null]);
@@ -45,6 +56,7 @@ class Orders
 
     public static function addOrder($userId, $date)
     {
+        var_dump($userId, $date);
         Core::getInstance()->db->insert(
             self::$tableName,
             [
@@ -52,6 +64,7 @@ class Orders
                 'Date' => $date,
             ]
         );
+
     }
 
     public static function updateOrderItem($id, $updatesArray)

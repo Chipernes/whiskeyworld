@@ -52,11 +52,37 @@ use core\Core;
             <th><?= $cart['totalPrice'] ?> грн</th>
         </tr>
     </table>
-    <a class="btn btn-primary mt-3" href="#" id="submitOrder">Оформити замовлення</a>
+
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Оформити замовлення
+    </button>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Для оформлення замовлення потрібно ввести свій номер телефону</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label" for="phone">Номер телефону</label>
+                    <input class="form-control" type="text" name="phone" id="phone" aria-describedby="phoneHelp" value="<?= $model['phone'] ?>">
+                    <?php if (!empty($errors['phone'])): ?>
+                        <div id="phoneHelp" class="form-text text-danger"><?php echo $errors['phone'] ?></div>
+                    <?php endif; ?>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрити</button>
+                    <a class="btn btn-primary " href="#" id="submitOrder">Підтвердити</a>
+                </div>
+            </div>
+        </div>
+    </div>
 <?php endif; ?>
 
 <script defer>
     const button =  document.getElementById("submitOrder");
+    const phoneInput =  document.getElementById("phone");
     // Отримайте дані з таблиці та підготуйте їх до відправки
     let productsData = [];
     const rows = document.querySelectorAll(".table tbody tr");
@@ -91,7 +117,7 @@ use core\Core;
             productCounts.push(product.count);
         });
 
-        const queryParams = `productNames=${productNames.join(',')}&productPrices=${productPrices.join(',')}&productCounts=${productCounts.join(',')}`;
+        const queryParams = `productNames=${productNames.join(',')}&productPrices=${productPrices.join(',')}&productCounts=${productCounts.join(',')}&phone=${phoneInput.value}`;
 
         // Складіть URL для відправки GET-запиту
         button.href = `/orderItems/add?${queryParams}`;

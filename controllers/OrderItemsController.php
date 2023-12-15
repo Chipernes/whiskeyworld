@@ -40,9 +40,14 @@ class OrderItemsController extends Controller
                 $productCounts = explode(',', $_GET['productCounts']);
             }
 
+            if (!empty($_GET['phone'])) {
+                $phone = explode(',', $_GET['phone']);
+            }
+
             for ($i = 0; $i < count($productNames); $i += 1) {
                 $productId =  Products::getProductIdByName($productNames[$i]);
                 OrderItems::addOrderItem($lastOrderId, $productId, $productCounts[$i], $productPrices[$i]);
+                User::updateUser($currentUserId, ['PhoneNumber' => $phone[0]]);
             }
 
             Cart::resetCart();
@@ -51,64 +56,5 @@ class OrderItemsController extends Controller
         }
 
         return $this->render();
-    }
-
-    public function editAction()
-    {
-        if (!User::isAdmin())
-            return $this->error(403);
-
-        $sugarContents = SugarContents::getSugarContents();
-
-        $errors = [];
-        if (empty($_GET['name']))
-            $errors['name'] = 'Назва класифікації вмісту цукру не вказана';
-
-        if ($_GET['check'] == 'false') {
-            $errors = 1;
-        }
-
-        if (empty($errors)) {
-            SugarContents::updateSugarContent(
-                $_GET['sugarContentId'],
-                [
-                    'Name' => $_GET['name'],
-                ]);
-
-            $this->redirect('/sugarContents');
-        } else {
-            $model = $_GET;
-            return $this->render(null,
-                [
-                    'model' => $model,
-                    'errors' => $errors,
-                    'sugarContents' => $sugarContents,
-                ]);
-        }
-
-
-        return $this->render(null,
-            [
-                'sugarContents' => $sugarContents,
-            ]);
-    }
-
-    public function deleteAction($params)
-    {
-        $id = intval($params[0]);
-        $yes = boolval($params[1] == 'yes');
-        if (!User::isAdmin())
-            return $this->error(403);
-
-        $sugarContents = SugarContents::getSugarContents();
-        if ($yes) {
-            SugarContents::deleteSugarContent($id);
-            $this->redirect('/sugarContents');
-        }
-
-        return $this->render(null,
-            [
-                'sugarContents' => $sugarContents,
-            ]);
     }
 }
