@@ -3,7 +3,7 @@
 /** @var array $brands*/
 /** @var array $products*/
 /** @var array $groupedProductsByTypes*/
-/** @var array $groupedProductsByValues*/
+/** @var array $groupedProductsByVolumes*/
 /** @var array $groupedCountries*/
 /** @var array $joinedProductWithCategory*/
 /** @var array $filteredProducts*/
@@ -12,9 +12,10 @@ use models\User;
 
 $brandsNames = explode(',', $_GET['brand']);
 $typesNames = explode(',', $_GET['type']);
-$valuesNames = explode(',', $_GET['value']);
+$volumeNames = explode(',', $_GET['volume']);
 $aging = explode(',', $_GET['aging']);
 $countriesNames = explode(',', $_GET['country']);
+$price = explode('-', $_GET['price']);
 ?>
 
 <?php include('themes/light/svg.html') ?>
@@ -49,15 +50,12 @@ $countriesNames = explode(',', $_GET['country']);
         </div>
         <div class="mb-3">
             <h5>Ціна</h5>
-            <div>
-                <label for="minPrice">Мінімальна ціна:</label>
-                <input type="number" id="minPrice" name="minPrice" min="0" max="1000">
+            <div class="d-flex align-items-center gap-2">
+                <input class="form-control" type="text" id="minPrice" name="minPrice" value="<?= $price[0] ?>">
+                <span>-</span>
+                <input class="form-control" type="text" id="maxPrice" name="maxPrice" value="<?= $price[1] ?>">
             </div>
-            <div>
-                <label for="maxPrice">Максимальна ціна:</label>
-                <input type="number" id="maxPrice" name="maxPrice" min="0" max="1000">
-            </div>
-            <button onclick="applyPriceFilter()">Застосувати фільтр</button>
+            <button class="btn btn-primary mt-1" onclick="applyPriceFilter()">ОК</button>
         </div>
 
         <div class="mb-3">
@@ -85,17 +83,17 @@ $countriesNames = explode(',', $_GET['country']);
             <h5>Об'єм</h5>
             <div>
                 <ul class="p-0" style="list-style: none">
-                    <?php foreach ($groupedProductsByValues as $groupedProductsByValue) : ?>
+                    <?php foreach ($groupedProductsByVolumes as $groupedProductsByVolume) : ?>
                         <li>
-                            <a href="javascript:void(0);" onclick="toggleValue('<?= $groupedProductsByValue['Volume'] ?>')" class="btn p-0 d-flex align-items-center gap-2">
+                            <a href="javascript:void(0);" onclick="toggleVolume('<?= $groupedProductsByVolume['Volume'] ?>')" class="btn p-0 d-flex align-items-center gap-2">
                                 <svg width="16" height="16">
-                                    <?php if (in_array($groupedProductsByValue['Volume'], $valuesNames)): ?>
+                                    <?php if (in_array($groupedProductsByVolume['Volume'], $volumeNames)): ?>
                                         <use xlink:href="#checked"></use>
                                     <?php else: ?>
                                         <use xlink:href="#unchecked"></use>
                                     <?php endif; ?>
                                 </svg>
-                                <?= $groupedProductsByValue['Volume'] ?>
+                                <?= $groupedProductsByVolume['Volume'] ?>
                             </a>
                         </li>
                     <?php endforeach; ?>
@@ -245,45 +243,6 @@ $countriesNames = explode(',', $_GET['country']);
 </div>
 
 <script>
-    function applyPriceFilter() {
-        let minPrice = document.getElementById('minPrice').value;
-        let maxPrice = document.getElementById('maxPrice').value;
-
-        let currentUrl = window.location.href;
-        let newUrl;
-
-        let queryParams = new URLSearchParams(window.location.search);
-
-        // Додати мінімальну ціну до параметрів
-        if (minPrice !== '') {
-            queryParams.set('minPrice', minPrice);
-        } else {
-            queryParams.delete('minPrice');
-        }
-
-        // Додати максимальну ціну до параметрів
-        if (maxPrice !== '') {
-            queryParams.set('maxPrice', maxPrice);
-        } else {
-            queryParams.delete('maxPrice');
-        }
-
-        // Видалити порожні параметри з URL
-        Array.from(queryParams.keys())
-            .filter(key => queryParams.get(key) === '')
-            .forEach(emptyParam => queryParams.delete(emptyParam));
-
-        // Додати всі інші параметри до URL
-        let paramsString = Array.from(queryParams.keys())
-            .map(key => key + '=' + queryParams.get(key))
-            .join('&');
-
-        newUrl = currentUrl.split('?')[0] + (paramsString ? '?' + paramsString : '');
-
-        window.location.href = newUrl;
-    }
-
-
     function toggleParameter(paramName, paramValue) {
         let currentUrl = window.location.href;
         let newUrl;
@@ -335,8 +294,8 @@ $countriesNames = explode(',', $_GET['country']);
     }
 
     // Використання функції для value
-    function toggleValue(valueName) {
-        toggleParameter('value', valueName);
+    function toggleVolume(volumeName) {
+        toggleParameter('volume', volumeName);
     }
 
     // Використання функції для aging
@@ -348,4 +307,37 @@ $countriesNames = explode(',', $_GET['country']);
     function toggleCountry(countryName) {
         toggleParameter('country', countryName);
     }
+
+    function applyPriceFilter() {
+        let minPrice = document.getElementById('minPrice').value;
+        let maxPrice = document.getElementById('maxPrice').value;
+
+        let currentUrl = window.location.href;
+        let newUrl;
+
+        let queryParams = new URLSearchParams(window.location.search);
+
+        // Додати мінімальну і максимальну ціну до параметрів
+        if (minPrice !== '' || maxPrice !== '') {
+            let priceRange = minPrice + '-' + maxPrice;
+            queryParams.set('price', priceRange);
+        } else {
+            queryParams.delete('price');
+        }
+
+        // Видалити порожні параметри з URL
+        Array.from(queryParams.keys())
+            .filter(key => queryParams.get(key) === '')
+            .forEach(emptyParam => queryParams.delete(emptyParam));
+
+        // Додати всі інші параметри до URL
+        let paramsString = Array.from(queryParams.keys())
+            .map(key => key + '=' + queryParams.get(key))
+            .join('&');
+
+        newUrl = currentUrl.split('?')[0] + (paramsString ? '?' + paramsString : '');
+
+        window.location.href = newUrl;
+    }
+
 </script>

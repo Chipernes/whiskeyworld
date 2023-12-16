@@ -19,23 +19,32 @@ class ProductsController extends Controller
         $brands = Brands::getBrands();
         $products = Products::getAllProduct();
         $groupedProductsByTypes = Products::getGroupedProduct('Type', ['Type' => 'IS NOT Null'], 'Type');
-        $groupedProductsByValues = Products::getGroupedProduct('Volume', null, 'Volume');
+        $groupedProductsByVolumes = Products::getGroupedProduct('Volume', null, 'Volume');
         $groupedCountries = Brands::getGroupedBrand('Country');
 
         $filteredProducts = Products::getJoinedProductWithCategory();
         if (count($_GET) > 1) {
             $brandFilter = isset($_GET['brand']) ? explode(',', $_GET['brand']) : [];
             $typeFilter = isset($_GET['type']) ? explode(',', $_GET['type']) : [];
-            $valueFilter = isset($_GET['value']) ? explode(',', $_GET['value']) : [];
+            $volumeFilter = isset($_GET['volume']) ? explode(',', $_GET['volume']) : [];
             $agingFilter = isset($_GET['aging']) ? explode(',', $_GET['aging']) : [];
             $countryFilter = isset($_GET['country']) ? explode(',', $_GET['country']) : [];
+
+            $priceRange = $_GET['price'] ?? null;
+            if (empty($priceRange)) {
+                $price = [];
+            } else {
+                list($minPrice, $maxPrice) = $priceRange ? array_map('intval', explode('-', $priceRange)) : [null, null];
+                $price = [$minPrice, $maxPrice];
+            }
 
             $filters = [
                 'brand'   => $brandFilter,
                 'type'    => $typeFilter,
-                'value'   => $valueFilter,
+                'volume'   => $volumeFilter,
                 'aging'   => $agingFilter,
                 'country' => $countryFilter,
+                'price' => $price,
             ];
 
             $filteredProducts = Products::filterProducts($filters);
@@ -45,7 +54,7 @@ class ProductsController extends Controller
             'brands' => $brands,
             'products' => $products,
             'groupedProductsByTypes' => $groupedProductsByTypes,
-            'groupedProductsByValues' => $groupedProductsByValues,
+            'groupedProductsByVolumes' => $groupedProductsByVolumes,
             'groupedCountries' => $groupedCountries,
             'filteredProducts' => $filteredProducts,
         ]);

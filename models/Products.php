@@ -211,6 +211,16 @@ class Products
 
         return null;
     }
+
+    public static function getProductsByPrice($values): ?array
+    {
+        $conditions = [
+            'Price' => [$values[0], $values[1]],
+        ];
+
+        return Core::getInstance()->db->selectBetween(self::$tableName, '*', $conditions);
+    }
+
     public static function filterProducts($filters): ?array
     {
         $filteredProducts = null;

@@ -97,6 +97,49 @@ class DB
         return $res->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    public function selectBetween($tableName, $fieldsList = '*', $conditions = null, $conditionOperators = 'AND')
+    {
+        if (is_string($fieldsList)) {
+            $fieldsListString = $fieldsList;
+        } elseif (is_array($fieldsList)) {
+            $fieldsListString = implode(', ', $fieldsList);
+        } else {
+            $fieldsListString = '*';
+        }
+
+        $wherePartString = '';
+        $conditionsArray = [];
+        if (is_array($conditions)) {
+            $whereParts = [];
+            foreach ($conditions as $key => $value) {
+                if (is_array($value) && count($value) === 2) {
+                    $minValue = $value[0];
+                    $maxValue = $value[1];
+                    $whereParts[] = "({$key} >= :min_{$key} AND {$key} <= :max_{$key})";
+                    $conditionsArray[":min_{$key}"] = $minValue;
+                    $conditionsArray[":max_{$key}"] = $maxValue;
+                } else {
+                    $whereParts[] = "{$key} = :{$key}";
+                    $conditionsArray[":{$key}"] = $value;
+                }
+            }
+            $wherePartString = 'WHERE ' . implode(" $conditionOperators ", $whereParts);
+        }
+
+        $query = "SELECT {$fieldsListString} FROM {$tableName} {$wherePartString}";
+        $res = $this->pdo->prepare($query);
+
+        $placeholdersCount = substr_count($query, ':');
+        $boundParamsCount = count($conditionsArray);
+
+        if ($placeholdersCount !== $boundParamsCount) {
+            throw new \RuntimeException("Invalid number of bound variables. Expected {$placeholdersCount}, got {$boundParamsCount}.");
+        }
+
+        $res->execute($conditionsArray);
+        return $res->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     public function update($tableName, $newValuesArray, $conditionArray)
     {
         $setPart = [];
