@@ -6,6 +6,7 @@
 /** @var array $groupedProductsByValues*/
 /** @var array $groupedCountries*/
 /** @var array $joinedProductWithCategory*/
+/** @var array $filteredProducts*/
 
 use models\User;
 
@@ -49,12 +50,16 @@ $countriesNames = explode(',', $_GET['country']);
         <div class="mb-3">
             <h5>Ціна</h5>
             <div>
-                Тут буде рендж інпут
-                <label>
-                    <input type="range" name="">
-                </label>
+                <label for="minPrice">Мінімальна ціна:</label>
+                <input type="number" id="minPrice" name="minPrice" min="0" max="1000">
             </div>
+            <div>
+                <label for="maxPrice">Максимальна ціна:</label>
+                <input type="number" id="maxPrice" name="maxPrice" min="0" max="1000">
+            </div>
+            <button onclick="applyPriceFilter()">Застосувати фільтр</button>
         </div>
+
         <div class="mb-3">
             <h5>Вид</h5>
             <div>
@@ -188,7 +193,7 @@ $countriesNames = explode(',', $_GET['country']);
     </aside>
 
     <div class="col-10 row row-cols-1 row-cols-md-4" style="height: 100%">
-        <?php foreach ($joinedProductWithCategory as $item): ?>
+        <?php foreach ($filteredProducts as $item): ?>
             <?php if ($item['Visibility'] == 0 && !User::isAdmin()): ?>
                 <div class="col mb-3" style="display: none">
             <?php else: ?>
@@ -240,30 +245,81 @@ $countriesNames = explode(',', $_GET['country']);
 </div>
 
 <script>
+    function applyPriceFilter() {
+        let minPrice = document.getElementById('minPrice').value;
+        let maxPrice = document.getElementById('maxPrice').value;
+
+        let currentUrl = window.location.href;
+        let newUrl;
+
+        let queryParams = new URLSearchParams(window.location.search);
+
+        // Додати мінімальну ціну до параметрів
+        if (minPrice !== '') {
+            queryParams.set('minPrice', minPrice);
+        } else {
+            queryParams.delete('minPrice');
+        }
+
+        // Додати максимальну ціну до параметрів
+        if (maxPrice !== '') {
+            queryParams.set('maxPrice', maxPrice);
+        } else {
+            queryParams.delete('maxPrice');
+        }
+
+        // Видалити порожні параметри з URL
+        Array.from(queryParams.keys())
+            .filter(key => queryParams.get(key) === '')
+            .forEach(emptyParam => queryParams.delete(emptyParam));
+
+        // Додати всі інші параметри до URL
+        let paramsString = Array.from(queryParams.keys())
+            .map(key => key + '=' + queryParams.get(key))
+            .join('&');
+
+        newUrl = currentUrl.split('?')[0] + (paramsString ? '?' + paramsString : '');
+
+        window.location.href = newUrl;
+    }
+
+
     function toggleParameter(paramName, paramValue) {
         let currentUrl = window.location.href;
         let newUrl;
 
-        if (currentUrl.includes(`?${paramName}=`) || currentUrl.includes(`&${paramName}=`)) {
-            let encodedParamValue = encodeURIComponent(paramValue);
-            let regex = new RegExp(`${encodedParamValue}(?:,|$)`, 'g');
+        let queryParams = new URLSearchParams(window.location.search);
 
-            if (currentUrl.match(regex)) {
-                newUrl = currentUrl.replace(regex, '');
+        if (queryParams.has(paramName)) {
+            let values = queryParams.get(paramName).split(',');
+            let index = values.indexOf(paramValue);
+
+            if (index !== -1) {
+                values.splice(index, 1);
             } else {
-                newUrl = currentUrl + ',' + encodedParamValue + ',';
+                values.push(paramValue);
+            }
+
+            if (values.length > 0) {
+                queryParams.set(paramName, values.join(','));
+            } else {
+                queryParams.delete(paramName);
             }
         } else {
-            let encodedParamValue = encodeURIComponent(paramValue);
-            newUrl = `?${paramName}=${encodedParamValue}`;
+            queryParams.append(paramName, paramValue);
         }
 
-        newUrl = newUrl.replace(/,,/g, ',');
-        newUrl = newUrl.replace(/,$/, '');
+        // Видаляє порожні параметри з URL
+        Array.from(queryParams.keys())
+            .filter(key => queryParams.get(key) === '')
+            .forEach(emptyParam => queryParams.delete(emptyParam));
 
-        if (newUrl.endsWith(`?${paramName}=`) || newUrl.endsWith(`&${paramName}=`)) {
-            newUrl = newUrl.substring(0, newUrl.length - (paramName.length + 2));
-        }
+        // Додати всі інші параметри до URL
+        let paramsString = Array.from(queryParams.keys())
+            .map(key => key + '=' + queryParams.get(key))
+            .join('&');
+
+        newUrl = currentUrl.split('?')[0] + (paramsString ? '?' + paramsString : '');
 
         window.location.href = newUrl;
     }

@@ -42,7 +42,6 @@ class User
 
     public static function updateUser($id, $updatesArray)
     {
-        //$updatesArray = Utils::filterArray($updatesArray, ['Email', 'Login', 'Password', 'Firstname', 'Lastname', 'BirthDate', 'GenderId']);
         Core::getInstance()->db->update(
             self::$tableName,
             $updatesArray,

@@ -21,42 +21,34 @@ class ProductsController extends Controller
         $groupedProductsByTypes = Products::getGroupedProduct('Type', ['Type' => 'IS NOT Null'], 'Type');
         $groupedProductsByValues = Products::getGroupedProduct('Volume', null, 'Volume');
         $groupedCountries = Brands::getGroupedBrand('Country');
-        $joinedProductWithCategory = Products::getJoinedProductWithCategory();
 
-        if (!empty($_GET['brand'])) {
-            $brandsNames = explode(',', $_GET['brand']);
-            $joinedProductWithCategory = Products::getProductsByBrandName($brandsNames);
+        $filteredProducts = Products::getJoinedProductWithCategory();
+        if (count($_GET) > 1) {
+            $brandFilter = isset($_GET['brand']) ? explode(',', $_GET['brand']) : [];
+            $typeFilter = isset($_GET['type']) ? explode(',', $_GET['type']) : [];
+            $valueFilter = isset($_GET['value']) ? explode(',', $_GET['value']) : [];
+            $agingFilter = isset($_GET['aging']) ? explode(',', $_GET['aging']) : [];
+            $countryFilter = isset($_GET['country']) ? explode(',', $_GET['country']) : [];
+
+            $filters = [
+                'brand'   => $brandFilter,
+                'type'    => $typeFilter,
+                'value'   => $valueFilter,
+                'aging'   => $agingFilter,
+                'country' => $countryFilter,
+            ];
+
+            $filteredProducts = Products::filterProducts($filters);
         }
 
-        if (!empty($_GET['type'])) {
-            $typesNames = explode(',', $_GET['type']);
-            $joinedProductWithCategory = Products::getProductsByType($typesNames);
-        }
-
-        if (!empty($_GET['value'])) {
-            $valuesNames = explode(',', $_GET['value']);
-            $joinedProductWithCategory = Products::getProductsByVolume($valuesNames);
-        }
-
-        if (!empty($_GET['aging'])) {
-            $valuesNames = explode(',', $_GET['aging']);
-            $joinedProductWithCategory = Products::getProductsByAging($valuesNames);
-        }
-
-        if (!empty($_GET['country'])) {
-            $valuesNames = explode(',', $_GET['country']);
-            $joinedProductWithCategory = Products::getProductsByCountry($valuesNames);
-        }
-
-        return $this->render(null,
-            [
-                'brands' => $brands,
-                'products' => $products,
-                'groupedProductsByTypes' => $groupedProductsByTypes,
-                'groupedProductsByValues' => $groupedProductsByValues,
-                'groupedCountries' => $groupedCountries,
-                'joinedProductWithCategory' => $joinedProductWithCategory,
-            ]);
+        return $this->render(null, [
+            'brands' => $brands,
+            'products' => $products,
+            'groupedProductsByTypes' => $groupedProductsByTypes,
+            'groupedProductsByValues' => $groupedProductsByValues,
+            'groupedCountries' => $groupedCountries,
+            'filteredProducts' => $filteredProducts,
+        ]);
     }
 
     public function addAction($params)

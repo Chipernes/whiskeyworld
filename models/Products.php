@@ -72,7 +72,7 @@ class Products
         return null;
     }
 
-    public static function getProductsByBrandName($brandsNames): ?array
+    public static function getProductsByBrand($brandsNames): ?array
     {
         $productRows = [];
 
@@ -210,6 +210,27 @@ class Products
         }
 
         return null;
+    }
+    public static function filterProducts($filters): ?array
+    {
+        $filteredProducts = null;
+
+        foreach ($filters as $key => $values) {
+            if (!empty($values)) {
+                $method = 'getProductsBy' . ucfirst($key);
+                $products = self::$method($values);
+
+                if ($filteredProducts === null) {
+                    $filteredProducts = $products;
+                } else {
+                    $filteredProducts = array_filter($filteredProducts, function ($product) use ($products) {
+                        return in_array($product, $products);
+                    });
+                }
+            }
+        }
+
+        return array_values($filteredProducts);
     }
 
     public static function getJoinedProductWithCategory()
