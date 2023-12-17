@@ -49,8 +49,12 @@ class UserController extends Controller
 
         if (Core::getInstance()->requestMethod == 'POST') {
             $errors = [];
-            if (empty($_POST['login']))
-                $errors['login'] = 'Назва категорії не вказана';
+
+            if (User::isUserExists('Email', $_POST['email']))
+                $errors['email'] = 'Така електронна пошта вже зайнята';
+
+            if (User::isUserExists('Login', $_POST['login']))
+                $errors['login'] = 'Такий логін вже зайнятий';
 
             if (empty($errors)) {
                 $valuesArray = [

@@ -37,8 +37,7 @@ class Products
         $fieldsList = ['CategoryId', 'Name', 'Type', 'Color', 'SugarContentId', 'BrandId', 'Volume', 'Strength',
             'Taste', 'GrapeVarietyId', 'Aging', 'Description', 'Count', 'Price', 'Visibility'];
 
-        $newRow = Utils::filterArray($newRow, $fieldsList);
-
+        //$newRow = Utils::filterArray($newRow, $fieldsList);
         Core::getInstance()->db->update(self::$tableName, $newRow, ['ProductId' => $id]);
     }
 

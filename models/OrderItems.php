@@ -39,11 +39,6 @@ class OrderItems
         return Core::getInstance()->db->selectGroup(self::$tableName, 'OrderId, SUM(`Count` * `Price`) AS TotalPrice', null, 'AND', 'OrderId');
     }
 
-    public static function getJoinedOrderItemsWithProducts()
-    {
-        return Core::getInstance()->db->selectJoin(['OrderItems', 'Products'], ['ProductId'], ['Products.Name', 'OrderItems.*'], ['ProductName', null]);
-    }
-
     public static function addOrderItem($orderId, $productId, $count, $price)
     {
         Core::getInstance()->db->insert(

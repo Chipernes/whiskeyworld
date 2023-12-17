@@ -2,10 +2,10 @@
 
 /* @var array $orderItems **/
 /* @var array $joinedOrdersWithUsers **/
-/* @var array $joinedOrderItemsWithProducts **/
 /* @var array $totalPrice **/
 /* @var array $statuses **/
 /* @var array $orders **/
+/* @var array $products **/
 
 $index = 0;
 
@@ -27,7 +27,7 @@ $index = 0;
         <?php foreach ($orderItems as $orderItem): ?>
             <tr>
                 <td><?= $index + 1 ?></td>
-                <td><?= $joinedOrderItemsWithProducts[$orderItem['OrderItemId'] - 1]['ProductName'] ?></td>
+                <td><?= $products[$orderItem['ProductId'] - 1]['Name'] ?></td>
                 <td><?= $orderItem['Count'] ?></td>
                 <td><?= $orderItem['Price'] ?> грн</td>
             </tr>

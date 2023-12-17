@@ -16,6 +16,7 @@ $index = 0;
         <tr>
             <th>№</th>
             <th>Ім'я та прізвище користувача</th>
+            <th>Номер телефону</th>
             <th>Дата</th>
             <th>Повна вартість замовлення</th>
             <th>Статус</th>
@@ -27,6 +28,7 @@ $index = 0;
             <tr>
                 <td><?= $order['OrderId'] ?></td>
                 <td><?= $joinedOrdersWithUsers[$index]['Firstname'], ' ', $joinedOrdersWithUsers[$index]['Lastname'] ?></td>
+                <td><?= $joinedOrdersWithUsers[$index]['PhoneNumber'] ?></td>
                 <td><?= $order['Date'] ?></td>
                 <td><?= $order['TotalPrice'] ?> грн</td>
                 <td><?= $joinedOrdersWithStatuses[$index]['StatusName'] ?></td>
