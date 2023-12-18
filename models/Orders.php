@@ -36,7 +36,7 @@ class Orders
 
     public static function getJoinedOrdersWithUsers()
     {
-        return Core::getInstance()->db->selectJoin(['Orders', 'Users'], ['UserId'], ['Users.Firstname', 'Users.Lastname', 'Users.PhoneNumber', 'Orders.*'], ['Firstname', 'Lastname', 'PhoneNumber', null]);
+        return Core::getInstance()->db->selectJoin(['Orders', 'Users'], ['UserId'], ['Users.Firstname', 'Users.Lastname', 'Users.PhoneNumber', 'Orders.*'], ['Firstname', 'Lastname', 'PhoneNumber', null], [], ['OrderId']);
     }
 
     public static function getJoinedOrdersWithStatuses()

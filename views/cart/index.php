@@ -32,10 +32,10 @@ use core\Core;
                 <td><?= $product['products']['Name'] ?></td>
                 <td><?= $product['products']['Price'] ?></td>
                 <td>
-                    <input class="form-control" type="number" max="<?= $product['products']['Count'] ?>"
+                    <input id="count" class="form-control" type="number" min="1" max="<?= $product['products']['Count'] ?>"
                            value="<?= $product['count'] ?>">
                 </td>
-                <td><?= $product['products']['Price'] * $product['count'] ?></td>
+                <td id="totalPrice"><?= $product['products']['Price'] * $product['count'] ?></td>
                 <td>
                     <a href="/cart/delete/<?= $product['products']['ProductId'] ?>"
                        class="btn-close bg-danger opacity-100 d-block" aria-label="Close"></a>
@@ -49,7 +49,7 @@ use core\Core;
         <tr>
             <th></th>
             <th>Загальна сума</th>
-            <th><?= $cart['totalPrice'] ?> грн</th>
+            <th id="totalSum"><?= $cart['totalPrice'] ?> грн</th>
         </tr>
     </table>
 
@@ -83,7 +83,6 @@ use core\Core;
 <script defer>
     const button =  document.getElementById("submitOrder");
     const phoneInput =  document.getElementById("phone");
-    // Отримайте дані з таблиці та підготуйте їх до відправки
     let productsData = [];
     const rows = document.querySelectorAll(".table tbody tr");
 
@@ -119,8 +118,86 @@ use core\Core;
 
         const queryParams = `productNames=${productNames.join(',')}&productPrices=${productPrices.join(',')}&productCounts=${productCounts.join(',')}&phone=${phoneInput.value}`;
 
-        // Складіть URL для відправки GET-запиту
         button.href = `/orderItems/add?${queryParams}`;
+    });
+
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const countInputs = document.querySelectorAll('input#count');
+
+        countInputs.forEach(function (input) {
+            input.addEventListener("input", function () {
+                let count = parseInt(input.value);
+                let price = parseFloat(input.closest("tr").querySelector("td:nth-child(3)").innerText);
+
+                let total = count * price;
+                input.closest("tr").querySelector("td#totalPrice").innerText = total;
+
+                updateTotal();
+            });
+        });
+
+        function updateTotal() {
+            let totalSum = 0;
+
+            let totalPriceElements = document.querySelectorAll('td#totalPrice');
+
+            totalPriceElements.forEach(function (totalPrice) {
+                totalSum += parseFloat(totalPrice.innerText);
+            });
+
+            let totalSumElement = document.querySelector('th#totalSum');
+
+            totalSumElement.innerText = totalSum + " грн";
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const countInput = document.getElementById('count');
+
+        countInput.addEventListener("change", function () {
+            let minValue = parseInt(countInput.getAttribute('min'));
+            let maxValue = parseInt(countInput.getAttribute('max'));
+
+            let enteredValue = parseInt(countInput.value);
+
+            if (!isNaN(minValue) && enteredValue < minValue) {
+                countInput.value = minValue;
+            } else if (!isNaN(maxValue) && enteredValue > maxValue) {
+                countInput.value = maxValue;
+            }
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const countInputs = document.querySelectorAll('input#count');
+
+        countInputs.forEach(function (input) {
+            input.addEventListener("change", function () {
+                let count = parseInt(input.value);
+                let price = parseFloat(input.closest("tr").querySelector("td:nth-child(3)").innerText);
+
+                let total = count * price;
+                input.closest("tr").querySelector("td#totalPrice").innerText = total;
+
+                updateTotal();
+            });
+        });
+
+        function updateTotal() {
+            let totalSum = 0;
+
+            let totalPriceElements = document.querySelectorAll('td#totalPrice');
+
+            totalPriceElements.forEach(function (totalPrice) {
+                totalSum += parseFloat(totalPrice.innerText);
+            });
+
+            let totalSumElement = document.querySelector('th#totalSum');
+
+            totalSumElement.innerText = totalSum + " грн";
+        }
     });
 </script>
 

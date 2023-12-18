@@ -20,6 +20,7 @@ $index = 0;
             <th>№</th>
             <th>Назва продукту</th>
             <th>Кількість</th>
+            <th>Ціна</th>
             <th>Вартість</th>
         </tr>
         </thead>
@@ -30,6 +31,7 @@ $index = 0;
                 <td><?= $products[$orderItem['ProductId'] - 1]['Name'] ?></td>
                 <td><?= $orderItem['Count'] ?></td>
                 <td><?= $orderItem['Price'] ?> грн</td>
+                <td><?= $orderItem['Price'] * $orderItem['Count'] ?> грн</td>
             </tr>
 
             <?php $index += 1; ?>

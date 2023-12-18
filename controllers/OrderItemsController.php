@@ -45,7 +45,7 @@ class OrderItemsController extends Controller
             }
 
             for ($i = 0; $i < count($productNames); $i += 1) {
-                $productId =  Products::getProductIdByName($productNames[$i]);
+                $productId = Products::getProductIdByName($productNames[$i]);
 
                 OrderItems::addOrderItem($lastOrderId, $productId, $productCounts[$i], $productPrices[$i]);
                 User::updateUser($currentUserId, ['PhoneNumber' => $phone[0]]);
