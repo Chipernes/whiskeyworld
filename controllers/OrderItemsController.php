@@ -46,11 +46,12 @@ class OrderItemsController extends Controller
 
             for ($i = 0; $i < count($productNames); $i += 1) {
                 $productId =  Products::getProductIdByName($productNames[$i]);
+
                 OrderItems::addOrderItem($lastOrderId, $productId, $productCounts[$i], $productPrices[$i]);
                 User::updateUser($currentUserId, ['PhoneNumber' => $phone[0]]);
 
                 $currentProduct = Products::getProductById($productId);
-                //Products::updateProduct($productId, ['Count' => $currentProduct['Count'] - $productCounts]);
+                Products::updateProduct($productId, ['Count' => $currentProduct['Count'] - intval($productCounts[$i])]);
             }
 
             Cart::resetCart();
